@@ -1,0 +1,7 @@
+[build]
+  # Carpeta que contiene tus archivos HTML, CSS, JS
+  publish = "." 
+
+[functions]
+  # Directorio donde se encuentran tus Netlify Functions (¡Asegúrate de que coincide con tu estructura!)
+  directory = "netlify/functions"

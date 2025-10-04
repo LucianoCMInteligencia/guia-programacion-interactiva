@@ -1,13 +1,19 @@
 {
-  "name": "guia-programacion-interactiva",
+  "name": "w3c-proxy-project",
   "version": "1.0.0",
-  "description": "Guía interactiva de programación para DAM y DAW con funcionalidad Full-Stack.",
-  "main": "api/w3c-proxy.js",
+  "description": "Dependencies for Netlify Functions.",
+  "main": "index.js",
   "scripts": {
-    "start": "echo 'Deploying to Vercel'"
+    "start": "netlify dev"
   },
+  "keywords": [
+    "netlify",
+    "serverless",
+    "w3c"
+  ],
+  "author": "Luciano Francisco Amaya Gutiérrez",
+  "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.8" 
-    // ^ Esta línea le dice a Vercel que instale la librería axios
+    "node-fetch": "^2.6.1"
   }
 }
