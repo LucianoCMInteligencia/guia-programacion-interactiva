@@ -195,3 +195,48 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #eaf2f8; 
 }
+/* ================================================= */
+/* ESTILOS ESPECÍFICOS DEL W3C PROXY                 */
+/* ================================================= */
+
+.w3c-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.w3c-btn:hover {
+  background-color: #2980b9;
+}
+
+.w3c-card {
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+/* Estilo para éxito */
+.w3c-card.success {
+  background-color: #e6ffe6;
+  border: 1px solid #00c000;
+  color: #004d00;
+}
+
+/* Estilo para error */
+.w3c-card.error {
+  background-color: #ffe6e6;
+  border: 1px solid #c00000;
+  color: #4d0000;
+}
+
+.title-scraped {
+    display: block;
+    font-size: 1.1em;
+    padding: 5px 0;
+    color: #2c3e50;
+}
