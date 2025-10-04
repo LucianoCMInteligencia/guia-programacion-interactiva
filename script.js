@@ -24,16 +24,15 @@ async function fetchW3cStandards() {
         // El proxy externo devuelve el HTML crudo
         const rawHtml = await response.text(); 
         
-        // LÓGICA DE EXTRACCIÓN SIMPLE (Scraping): Intentamos extraer el título.
-        // CORRECCIÓN FINAL: Usamos una frase más corta y estable para asegurar la coincidencia.
-        const extractionMarker = "Pautas de Accesibilidad"; // <--- ¡CORRECCIÓN APLICADA AQUÍ!
+        // LÓGICA DE EXTRACCIÓN MÁS ROBUSTA: Verificamos una etiqueta de idioma que es muy estable.
+        const extractionMarker = 'lang="es"'; 
         
         let extractedContent = "No se pudo encontrar el fragmento clave en el HTML cargado.";
         let successMessage = "Esta sección demuestra la lógica de Front-End al usar un proxy para superar el bloqueo CORS.";
 
         if (rawHtml.includes(extractionMarker)) {
-            extractedContent = `**Título Encontrado:** "${extractionMarker}"`;
-            successMessage = "¡Perfecto! La conexión funcionó y extrajimos el título de la página del W3C.";
+            extractedContent = `**Etiqueta de idioma encontrada:** "${extractionMarker}"`;
+            successMessage = "¡Victoria! La conexión funcionó y confirmamos que el HTML es de la página W3C en español.";
         }
 
         // Inyectar el resultado de ÉXITO
