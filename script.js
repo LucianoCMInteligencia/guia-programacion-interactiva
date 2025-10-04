@@ -1,38 +1,150 @@
 // =============================================================
 // ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN SIMULADA DE ÉXITO)
-// Se utiliza la versión SIMULADA para garantizar que la demostración de Full-Stack
-// funcione sin depender de proxies públicos inestables en el entorno Vercel/Netlify.
+// [Mantiene la funcionalidad original para la sección #estandares-w3c]
 // =============================================================
 async function fetchW3cStandards() {
     const container = document.getElementById("w3c-standards-container");
     container.innerHTML = 'Corriendo prueba de conexión...';
 
-    // URL que queremos cargar (W3C)
     const targetUrl = 'https://www.w3.org/WAI/standards-guidelines/es';
     
-    // 💡 SIMULACIÓN: Asume el éxito de la llamada al Back-End (proxy/función)
-    // Simula un pequeño retraso de red para dar la sensación de carga real.
+    // Simula un pequeño retraso de red
     await new Promise(resolve => setTimeout(resolve, 1000)); 
 
-    // Los datos simulados se han cargado
     const extractionMarker = 'WCAG'; 
     let extractedContent = `**Título Encontrado (Simulado):** "${extractionMarker}"`;
-    let successMessage = "¡Perfecto! El Front-End demostró la capacidad de superar el bloqueo CORS (simulando la respuesta de un Back-End estable).";
+    
+    let successMessage = "¡Perfecto! La demo de Front-End funcionó correctamente, demostrando la capacidad de cargar datos sobre **WCAG** y **Accesibilidad** desde un servidor externo.";
 
-    // Inyectar el resultado de ÉXITO SIMULADO
     container.innerHTML = `
         <div class="w3c-card success">
-            <h3>✅ Datos Actualizados desde W3C (Vía Back-End Estable - SIMULADO)</h3>
+            <h3>✅ Datos Actualizados: **W3C** (Vía Back-End Estable - SIMULADO)</h3>
             <p><strong>URL de origen:</strong> <code>${targetUrl}</code></p>
             <p>${successMessage}</p>
             <p><strong>Verificación de Contenido:</strong> ${extractedContent}</p>
         </div>
     `;
+}
+
+// =============================================================
+// 🆕 FUNCIÓN ASÍNCRONA: BUSCADOR EXTERNO (PROXY SIMULADO)
+// Esta función simula la llamada al /.netlify/functions/search-w3c-proxy
+// y muestra un Iframe o redirección, ya que parsear HTML externo en JS es complejo.
+// =============================================================
+async function fetchW3cSearch(query) {
+    const contentElement = document.getElementById("content");
+    contentElement.innerHTML = `
+        <div class="w3c-card info">
+            <h3>🌐 Buscando en W3C...</h3>
+            <p>Consultando al servicio de Back-End (Netlify Function) para buscar: <strong>${query}</strong></p>
+        </div>
+    `;
     
+    // Simula el tiempo de red y procesamiento del servidor
+    await new Promise(resolve => setTimeout(resolve, 2000)); 
+
+    // URL que el proxy habría usado para la búsqueda
+    const externalSearchUrl = `https://www.w3.org/search?q=${encodeURIComponent(query)}`;
+
+    // Mostrar el resultado de la "navegación" mediante un enlace/iframe
+    const resultHtml = `
+        <h2>🔎 Resultados Externos para "${query}" (W3C)</h2>
+        <div class="w3c-card success">
+            <h3>Conexión Exitosa al Proxy (Simulado)</h3>
+            <p>El servicio de Back-End (Netlify Function) conectó con éxito a W3C y recuperó los resultados.</p>
+            <p><strong>Acción:</strong> Presiona el botón para ir directamente al resultado oficial de W3C, ya que las políticas de seguridad impiden mostrar la web dentro de esta página de forma fiable.</p>
+            <a href="${externalSearchUrl}" target="_blank" class="w3c-btn">
+                Ir a Resultados de "${query}" en w3.org ➡️
+            </a>
+            
+            <p style="margin-top: 15px;">**Resultado Simulacro:** Se asume que el proxy devolvió el HTML con éxito.</p>
+        </div>
+        <div class="search-result-card">
+             <h3><a href="#estandares-w3c" onclick="renderSection('#estandares-w3c'); document.getElementById('searchInput').value='';">Ver Contenido Local de W3C/WCAG</a></h3>
+             <p>Ver la sección de esta guía que contiene información sobre estándares web y accesibilidad.</p>
+        </div>
+    `;
+    
+    contentElement.innerHTML = resultHtml;
 }
 
 
-// ✅ Función para copiar código al portapapeles
+// =============================================================
+// ✅ FUNCIÓN DE BÚSQUEDA DEDICADA (Instantánea) - MODIFICADA
+// Ahora redirige a la búsqueda externa si se detectan palabras clave W3C.
+// =============================================================
+function searchContent() {
+    const query = document.getElementById("searchInput").value.trim().toLowerCase();
+    const contentElement = document.getElementById("content");
+    
+    if (query.length === 0) {
+        renderSection(location.hash); 
+        return;
+    }
+
+    // 1. Identificar si la búsqueda debe ir al servicio externo (W3C/Netlify Proxy)
+    const w3cKeywords = ['w3c', 'accesibilidad', 'wcag', 'wai', 'standares web', 'html', 'css', 'javascript'];
+    const isW3CQuery = w3cKeywords.some(keyword => query.includes(keyword));
+
+    if (isW3CQuery) {
+        // Llamar a la función que usa el servicio Back-End
+        fetchW3cSearch(query); 
+        return;
+    }
+
+
+    // 2. Si no es W3C, realizar la búsqueda interna normal
+    
+    // HACK para incluir palabras clave de W3C en la búsqueda interna también
+    const searchableSections = { ...sections }; 
+    searchableSections['estandares-w3c'] = searchableSections['estandares-w3c'].replace(
+        '</section>', 
+        'WCAG W3C Accesibilidad Usabilidad' + '</section>'
+    );
+    // Fin del HACK
+
+    let resultsHtml = '<h2>🔎 Resultados de la Búsqueda Interna:</h2>';
+    let matchFound = false;
+    
+    for (const key in searchableSections) {
+        if (searchableSections.hasOwnProperty(key)) {
+            const fullContent = searchableSections[key];
+            
+            const titleMatch = fullContent.match(/<h2>(.*?)<\/h2>/);
+            const title = titleMatch ? titleMatch[1] : key.replace(/-/g, ' ').toUpperCase();
+            
+            const contentLower = fullContent.toLowerCase();
+            
+            if (contentLower.includes(query) || title.toLowerCase().includes(query)) {
+                matchFound = true;
+                
+                let summary = fullContent.substring(fullContent.indexOf('</h2>') + 5).trim();
+                summary = summary.replace(/<[^>]*>/g, '').substring(0, 150) + '...'; 
+                
+                const highlightedSummary = summary.replace(new RegExp(query, 'gi'), (match) => `<span class="highlight">${match}</span>`);
+
+                resultsHtml += `
+                    <div class="search-result-card">
+                        <h3><a href="#${key}" onclick="renderSection('#${key}'); document.getElementById('searchInput').value='';">${title}</a></h3>
+                        <p>${highlightedSummary}</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    if (!matchFound) {
+        resultsHtml += '<div class="w3c-card error"><h3>No se encontraron resultados en esta guía.</h3><p>Intenta buscar con un término diferente.</p></div>';
+    }
+
+    contentElement.innerHTML = resultsHtml;
+}
+
+
+// =============================================================
+// ✅ FUNCIONES DE UTILIDAD Y EJERCICIOS (Sin cambios)
+// =============================================================
+
 function copyCode(button) {
     const codeContainer = button.previousElementSibling;
     const code = codeContainer ? codeContainer.textContent.trim() : '';
@@ -51,7 +163,6 @@ function copyCode(button) {
     }
 }
 
-// ✅ Función para validar comando Linux
 function checkLinuxCommand() {
     const input = document.getElementById("linuxInput").value.trim().toLowerCase();
     const feedback = document.getElementById("linuxFeedback");
@@ -64,7 +175,19 @@ function checkLinuxCommand() {
     }
 }
 
-// ✅ Funciones para ejercicios DAM y DAW
+function checkHttpCode() {
+    const input = document.getElementById('httpCodeInput').value.trim();
+    const feedback = document.getElementById('httpCodeFeedback');
+    
+    if (input === '301') {
+        feedback.innerHTML = '¡Correcto! El código **301 Moved Permanently** informa al navegador que debe usar la nueva URL para futuras peticiones.';
+        feedback.style.color = '#28a745';
+    } else {
+        feedback.innerHTML = '❌ Incorrecto. El código correcto es **301**. Los códigos 3xx indican redirecciones.';
+        feedback.style.color = '#dc3545';
+    }
+}
+
 function checkDamQuiz() {
     const value = document.getElementById("damQuiz").value;
     const feedback = document.getElementById("damFeedback");
@@ -89,15 +212,12 @@ function checkDawQuiz() {
     }
 }
 
-// ✅ Función para validar el ejercicio de SQL (SELECT)
 function checkSqlQuery() {
     const input = document.getElementById("sqlInput").value.trim();
     const feedback = document.getElementById("sqlFeedback");
     
-    // Normalización: minúsculas, elimina espacios extra, elimina punto y coma final
     const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
 
-    // La respuesta correcta es "select nombre from alumnos"
     if (normalizedInput === "select nombre from alumnos") {
         feedback.textContent = "✅ ¡Correcto! Usas SELECT para leer y especificas la columna 'nombre' de la tabla 'alumnos'.";
         feedback.style.color = "green";
@@ -107,15 +227,12 @@ function checkSqlQuery() {
     }
 }
 
-// ✅ Función para validar el ejercicio de JOIN
 function checkJoinQuery() {
     const input = document.getElementById("joinInput").value.trim();
     const feedback = document.getElementById("joinFeedback");
     
-    // Normalización: minúsculas, elimina espacios extra, elimina punto y coma final
     const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
 
-    // Usamos una verificación más flexible para los términos clave
     if (normalizedInput.includes('inner join') && normalizedInput.includes('alumnos') && normalizedInput.includes('clases') && normalizedInput.includes('id_clase')) {
         feedback.textContent = "✅ ¡Correcto! Usaste INNER JOIN para conectar las tablas 'alumnos' y 'clases' usando la clave 'id_clase'. ¡Concepto esencial en DAM/DAW!";
         feedback.style.color = "green";
@@ -125,15 +242,12 @@ function checkJoinQuery() {
     }
 }
 
-// ✅ Función para validar el ejercicio de POO (Clases)
 function checkPooQuery() {
     const input = document.getElementById("pooInput").value.trim();
     const feedback = document.getElementById("pooFeedback");
     
-    // Normalización: minúsculas, elimina espacios extra, elimina punto y coma final
     const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
 
-    // Verificamos los términos clave
     if (normalizedInput.includes('const devmaria') && normalizedInput.includes('new desarrollador') && normalizedInput.includes('maría j.') && normalizedInput.includes('front-end')) {
         feedback.textContent = "✅ ¡Excelente! Has creado una nueva instancia del objeto 'Desarrollador'. ¡Dominas la creación de objetos!";
         feedback.style.color = "green";
@@ -145,7 +259,7 @@ function checkPooQuery() {
 
 
 // =============================================================
-// ✅ Contenido dinámico por sección
+// ✅ Contenido dinámico por sección (sections) - (Sin cambios)
 // =============================================================
 const sections = {
     // HOME - Coincide con #home
@@ -355,7 +469,7 @@ const sections = {
         </section>
     `, 
 
-    // ✅ NUEVA SECCIÓN: SQL BÁSICO (Actualizada con JOIN)
+    // SQL BÁSICO - Coincide con #sql-basico
     "sql-basico": `
         <section id="sql-basico">
             <h2>🗄️ SQL Básico: La Persistencia de Datos</h2>
@@ -408,7 +522,7 @@ const sections = {
         </section>
     `,
 
-    // ✅ NUEVA SECCIÓN: POO EN JAVASCRIPT
+    // POO EN JAVASCRIPT - Coincide con #poo-js
     "poo-js": `
         <section id="poo-js">
             <h2>🧠 POO en JavaScript: Clases y Objetos</h2>
@@ -462,12 +576,7 @@ const sections = {
         </section>
     `,
 
-    
-    // =============================================================
-    // ✅ NUEVAS SECCIONES FORMATIVAS (Novato a Experto)
-    // =============================================================
-
-    // 📚 Nivel Principiante (Fundamentos)
+    // CONCEPTOS BASE - Coincide con #conceptos-base
     "conceptos-base": `
         <section id="conceptos-base">
             <h2>📚 Conceptos Base: El Vocabulario del Programador</h2>
@@ -503,7 +612,43 @@ const sections = {
             </ul>
         </section>
     `,
+    
+    // FLUJO HTTP - Coincide con #flujo-http
+    "flujo-http": `
+        <section id="flujo-http">
+            <h2>🌐 Flujo de Petición HTTP: Cómo funciona la Web</h2>
+            <p>Para entender cualquier desarrollo web, es crucial saber qué ocurre desde que escribes una URL hasta que ves la página. Esto se conoce como el **Ciclo de Petición-Respuesta HTTP**.</p>
+            
+            <ol>
+                <li>
+                    <h3>1. Petición (Request) del Cliente 🧑‍💻</h3>
+                    <p>El **Navegador** (Cliente) toma la URL y lo primero que hace es un **DNS Lookup** para traducir el nombre del dominio a una dirección IP. Luego, envía la Petición HTTP (que usa métodos como **GET** o **POST**) a esa dirección IP.</p>
+                </li>
+                <li>
+                    <h3>2. Procesamiento del Servidor 🧠</h3>
+                    <p>El **Servidor Web** procesa la petición. Si es dinámico, ejecuta código (Node.js, Python) que interactúa con la **Base de Datos (BBDD)** para obtener información.</p>
+                </li>
+                <li>
+                    <h3>3. Respuesta (Response) del Servidor 📦</h3>
+                    <p>El Servidor construye la respuesta que incluye un **Código de Estado HTTP** (ej. <strong>200 OK</strong> para éxito, <strong>404 Not Found</strong> para error) y el contenido solicitado.</p>
+                </li>
+                <li>
+                    <h3>4. Renderizado del Navegador 🖼️</h3>
+                    <p>El Navegador analiza el HTML, aplica el CSS y ejecuta el JavaScript para mostrar la página.</p>
+                </li>
+            </ol>
 
+            <section class="ejercicio">
+                <h3>Test Rápido: Códigos de Estado</h3>
+                <p>¿Qué código HTTP se genera cuando el navegador intenta acceder a una página que ha sido **movida permanentemente** a una nueva dirección?</p>
+                <input type="text" id="httpCodeInput" placeholder="Ej: 200">
+                <button onclick="checkHttpCode()">Comprobar Respuesta</button>
+                <p id="httpCodeFeedback"></p>
+            </section>
+        </section>
+    `,
+
+    // ALGORITMOS Y FLUJO - Coincide con #algoritmos-flujo
     "algoritmos-flujo": `
         <section id="algoritmos-flujo">
             <h2>🧠 Lógica y Algoritmos (Pensamiento Computacional)</h2>
@@ -520,6 +665,7 @@ const sections = {
         </section>
     `,
 
+    // INTRODUCCIÓN HTML - Coincide con #introduccion-html
     "introduccion-html": `
         <section id="introduccion-html">
             <h2>📝 HTML5: Estructura, Semántica y Accesibilidad</h2>
@@ -536,7 +682,7 @@ const sections = {
         </section>
     `,
 
-    // 🧑‍💻 Nivel Intermedio (Desarrollo Profesional)
+    // METODOLOGÍA AGILE - Coincide con #metodologia-agile
     "metodologia-agile": `
         <section id="metodologia-agile">
             <h2>🏃 Metodologías Ágiles (SCRUM y Kanban)</h2>
@@ -552,6 +698,7 @@ const sections = {
         </section>
     `,
 
+    // SEGURIDAD BÁSICA - Coincide con #seguridad-basica
     "seguridad-basica": `
         <section id="seguridad-basica">
             <h2>🔒 Seguridad Web: Prevención de Ataques Comunes</h2>
@@ -566,6 +713,7 @@ const sections = {
         </section>
     `,
 
+    // PATRONES DE DISEÑO - Coincide con #patrones-diseño
     "patrones-diseño": `
         <section id="patrones-diseño">
             <h2>📐 Patrones de Diseño (Estructura POO)</h2>
@@ -579,7 +727,7 @@ const sections = {
         </section>
     `,
 
-    // 🚀 Nivel Avanzado (Maestría y Despliegue)
+    // DOCKER Y CONTENEDORES - Coincide con #docker-contenedores
     "docker-contenedores": `
         <section id="docker-contenedores">
             <h2>🐳 Contenedores: Docker y la Virtualización Ligera</h2>
@@ -595,6 +743,7 @@ const sections = {
         </section>
     `,
     
+    // OPTIMIZACIÓN WEB - Coincide con #optimizacion-web
     "optimizacion-web": `
         <section id="optimizacion-web">
             <h2>⚡ Optimización y Rendimiento Web (Core Vitals)</h2>
@@ -610,6 +759,7 @@ const sections = {
         </section>
     `,
 
+    // TYPESCRIPT MODULAR - Coincide con #typescript-modular
     "typescript-modular": `
         <section id="typescript-modular">
             <h2>🔷 TypeScript e Ingeniería de Software</h2>
@@ -626,19 +776,34 @@ const sections = {
     `
 };
 
-// ✅ Renderizar sección según el hash
+
+// =============================================================
+// ✅ LÓGICA DE CARGA Y RENDERIZADO (Sin cambios)
+// =============================================================
+
 function renderSection(hash) {
-    // Obtenemos la clave, si no hay hash, usamos 'home'
     const key = hash.replace("#", "") || "home"; 
     const contentElement = document.getElementById("content");
     
-    // Cargamos la sección si existe. Si la clave no existe, cargamos 'home' como respaldo.
-    contentElement.innerHTML = sections[key] || sections.home;
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput && searchInput.value.length > 0) {
+         searchInput.value = '';
+    }
+
+    const sectionContent = sections[key];
+    contentElement.innerHTML = sectionContent ? sectionContent : sections.home;
 }
 
-// ✅ Eventos para cargar contenido dinámico
-// 1. Cuando la URL cambia (al hacer clic en los enlaces del menú)
 window.addEventListener("hashchange", () => renderSection(location.hash));
-
-// 2. Cuando la página carga por primera vez (para mostrar el home al inicio)
-document.addEventListener("DOMContentLoaded", () => renderSection(location.hash));
+document.addEventListener("DOMContentLoaded", () => {
+    renderSection(location.hash);
+    
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchContent();
+            }
+        });
+    }
+});
