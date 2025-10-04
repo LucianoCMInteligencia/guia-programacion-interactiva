@@ -1,12 +1,15 @@
-// Funciones de interactividad (No modificadas)
+// Funciones de interactividad
 // ----------------------------
 
 // ✅ Función para copiar código al portapapeles
 function copyCode(button) {
+  // Busca el elemento de código que precede al botón
   const codeContainer = button.previousElementSibling;
+  // Extrae el texto. Usamos .trim() para limpiar espacios y saltos de línea.
   const code = codeContainer ? codeContainer.textContent.trim() : '';
 
   if (code) {
+    // Usar el API del portapapeles
     navigator.clipboard.writeText(code).then(() => {
       const originalText = button.textContent;
       button.textContent = "¡Copiado! ✅";
@@ -276,7 +279,6 @@ const sections = {
     </section>
   `,
 
-  // SECCIÓN LINUX CORREGIDA Y AMPLIADA
   "linux-detallado": `
     <section id="linux-detallado">
       <h2>🐧 Módulo: La Terminal de Linux para Programadores</h2>
@@ -329,7 +331,7 @@ const sections = {
       <hr style="margin: 25px 0;">
 
       <h3>Desglose Detallado de la Instalación y Actualización</h3>
-      <p>El comando <code>sudo apt install firefox</code> es la respuesta al ejercicio, pero <code>sudo apt update && sudo apt upgrade -y</code> es fundamental para mantener el sistema actualizado.</p>
+      <p>El comando <code>sudo apt install firefox</code> es la respuesta al ejercicio, pero <code>sudo apt update && sudo apt upgrade -y</code> es fundamental para mantener tu entorno de desarrollo o servidor (en DAW/DAM) actualizado y seguro.</p>
 
       <h4>Comando de Ejemplo: Instalar Firefox (La respuesta al Quiz)</h4>
       <div class="terminal-command">
@@ -379,49 +381,60 @@ const sections = {
     </section>
   `,
 
-  "ciclo-despliegue": `
-    <section id="ciclo-despliegue">
-      <h2>🚀 Ciclo de Vida del Proyecto y Despliegue Profesional</h2>
-      <p>El desarrollo profesional no termina con el código. Un proyecto requiere de herramientas para su mantenimiento y publicación (Despliegue).</p>
+  "flujo-git": `
+    <section id="flujo-git">
+      <h2>🚀 Flujo de Despliegue Profesional (Git, GitHub y Vercel)</h2>
+      <p>Como vuestro profesor, os enseño que el desarrollo profesional no termina con el código. Un proyecto debe ser gestionado y publicado. Aquí aprenderéis el flujo de trabajo moderno y esencial con Git.</p>
 
-      <h3>Fase 1: Control de Versiones (Git y GitHub)</h3>
-      <p><strong>Git</strong> es el sistema para rastrear cambios en tu código y <strong>GitHub</strong> es la plataforma para colaborar y almacenar tu repositorio de forma remota.</p>
+      <h3>Paso 1: Control de Versiones con Git y GitHub</h3>
+      <p><strong>Git</strong> es la herramienta para rastrear y registrar los cambios en tu código. **GitHub** es la plataforma en la nube para almacenar el proyecto, colaborar y hacer copias de seguridad.</p>
+
+      <h4>El Ciclo de Trabajo Esencial (Add -> Commit -> Push)</h4>
       <table>
           <thead>
               <tr>
-                  <th>Herramienta</th>
-                  <th>Rol en el Proyecto</th>
-                  <th>Comando Esencial</th>
+                  <th>Comando</th>
+                  <th>Función</th>
+                  <th>Explicación del Proceso</th>
               </tr>
           </thead>
           <tbody>
               <tr>
-                  <td><strong>Git</strong></td>
-                  <td>Control de Versiones</td>
-                  <td><code>git init</code> (iniciar repositorio)</td>
+                  <td><code>git add .</code></td>
+                  <td>**Preparar (Stage)**</td>
+                  <td>Le dice a Git: "Quiero incluir todos estos archivos modificados en la próxima versión que voy a guardar."</td>
               </tr>
               <tr>
-                  <td><strong>GitHub</strong></td>
-                  <td>Almacenamiento y Colaboración</td>
-                  <td><code>git push -u origin main</code> (enviar código a la nube)</td>
+                  <td><code>git commit -m "Mensaje"</code></td>
+                  <td>**Guardar Versión (Commit)**</td>
+                  <td>Crea un punto de guardado inmutable (un *commit*) con los archivos preparados.</td>
+              </tr>
+              <tr>
+                  <td><code>git push</code></td>
+                  <td>**Publicar (Push)**</td>
+                  <td>Envía todos tus *commits* locales a tu repositorio en línea (GitHub), haciéndolos públicos.</td>
+              </tr>
+              <tr>
+                  <td><code>git pull origin main</code></td>
+                  <td>**Sincronizar (Pull)**</td>
+                  <td>Descarga e integra el trabajo que está en GitHub con tu copia local. (Es crucial para evitar errores de rechazo).</td>
               </tr>
           </tbody>
       </table>
       
-      <h3>Fase 2: Publicación y Despliegue (Hosting)</h3>
-      <p><strong>Vercel</strong> es una plataforma popular para desplegar rápidamente sitios estáticos (como esta guía) o aplicaciones web dinámicas.</p>
+      <h3>Paso 2: Despliegue Continuo con Vercel</h3>
+      <p>Una vez que el código está en **GitHub**, servicios como **Vercel** se conectan a tu repositorio para publicar automáticamente tu web.</p>
       
-      <p><strong>Flujo Completo (Desarrollo Local -> Despliegue)</strong>:</p>
+      <h4>El Proceso de Vercel</h4>
       <ol>
-        <li>Crea la estructura del proyecto en VSC: <code>mkdir guia-programacion</code></li>
-        <li>Escribe HTML, CSS y JS.</li>
-        <li>Inicializa Git: <code>git init</code> y guarda los cambios: <code>git add . && git commit -m "Primera versión"</code>.</li>
-        <li>Conecta tu proyecto local con GitHub y sube el código: <code>git push</code>.</li>
-        <li><strong>Despliega en Vercel:</strong> Conecta tu cuenta de Vercel a GitHub, importa el repositorio y Vercel lo publicará automáticamente, dándote una URL pública.</li>
+        <li>**Conexión:** Conectas Vercel a tu cuenta de GitHub e importas el repositorio de tu guía.</li>
+        <li>**Despliegue Inicial:** Vercel toma el código y genera una URL pública.</li>
+        <li>**Actualización Automática:** Cada vez que haces un **`git push`** a GitHub, Vercel detecta el cambio, reconstruye la página y la actualiza automáticamente en la URL pública.</li>
       </ol>
+      <p>¡Este flujo es lo que se conoce como **Integración y Despliegue Continuo (CI/CD)** y es el estándar de la industria!</p>
     </section>
   `,
-  
+
   "sobre-mi": `
     <section id="sobre-mi">
       <h2>Sobre Mí</h2>
