@@ -1,7 +1,7 @@
 // =============================================================
 // ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN SIMULADA DE ÉXITO)
-// Usamos esta versión simulada para garantizar la demostración de ÉXITO
-// sin depender de proxies públicos inestables, ya que el problema es externo.
+// Se utiliza la versión SIMULADA para garantizar que la demostración de Full-Stack
+// funcione sin depender de proxies públicos inestables en el entorno Vercel/Netlify.
 // =============================================================
 async function fetchW3cStandards() {
     const container = document.getElementById("w3c-standards-container");
@@ -148,329 +148,492 @@ function checkPooQuery() {
 // ✅ Contenido dinámico por sección
 // =============================================================
 const sections = {
-  // HOME - Coincide con #home
-  home: `
-    <section id="home">
-      <h2>👋 Bienvenido a Mi Guía Interactiva</h2>
-      <p>Esta guía te acompañará paso a paso en tu formación como programador, Luciano Francisco Amaya Gutiérrez. Navega por el menú superior para explorar los temas clave de los ciclos DAM y DAW, desde los fundamentos hasta el control de versiones y el despliegue profesional.</p>
-      <p>¡Comencemos!</p>
-    </section>
-  `,
+    // HOME - Coincide con #home
+    home: `
+        <section id="home">
+            <h2>👋 Bienvenido a Mi Guía Interactiva</h2>
+            <p>Esta guía te acompañará paso a paso en tu formación como programador, Luciano Francisco Amaya Gutiérrez. Navega por el menú superior para explorar los temas clave de los ciclos DAM y DAW, desde los fundamentos hasta el control de versiones y el despliegue profesional.</p>
+            <p>¡Comencemos!</p>
+        </section>
+    `,
 
-  // DAM vs DAW - Coincide con #que-es-dam-daw
-  "que-es-dam-daw": `
-    <section id="que-es-dam-daw">
-      <h2>🎓 DAM vs DAW: Elige tu camino</h2>
-      <p>DAM (Desarrollo de Aplicaciones Multiplataforma) y DAW (Desarrollo de Aplicaciones Web) son especialidades con un enfoque distinto:</p>
-      
-      <h3>🎯 Enfoque Principal</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Ciclo</th>
-            <th>Entorno Principal</th>
-            <th>Ejecución</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>**DAM**</td>
-            <td>Multiplataforma (Escritorio/Móvil)</td>
-            <td>Se instala y ejecuta directamente en el sistema operativo del dispositivo (móvil o escritorio).</td>
-          </tr>
-          <tr>
-            <td>**DAW**</td>
-            <td>Web</td>
-            <td>Se ejecuta en un navegador de internet (Front-End) o en un servidor (Back-End).</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  `,
+    // DAM vs DAW - Coincide con #que-es-dam-daw
+    "que-es-dam-daw": `
+        <section id="que-es-dam-daw">
+            <h2>🎓 DAM vs DAW: Elige tu camino</h2>
+            <p>DAM (Desarrollo de Aplicaciones Multiplataforma) y DAW (Desarrollo de Aplicaciones Web) son especialidades con un enfoque distinto:</p>
+            
+            <h3>🎯 Enfoque Principal</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ciclo</th>
+                        <th>Entorno Principal</th>
+                        <th>Ejecución</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>**DAM**</td>
+                        <td>Multiplataforma (Escritorio/Móvil)</td>
+                        <td>Se instala y ejecuta directamente en el sistema operativo del dispositivo (móvil o escritorio).</td>
+                    </tr>
+                    <tr>
+                        <td>**DAW**</td>
+                        <td>Web</td>
+                        <td>Se ejecuta en un navegador de internet (Front-End) o en un servidor (Back-End).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    `,
 
-  // DAW - Coincide con #daw
-  daw: `
-    <section id="daw">
-      <h2>🌐 Desarrollo de Aplicaciones Web (DAW)</h2>
-      <p>Especialidad centrada en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones que se ejecutan en navegadores y servidores.</p>
+    // DAW - Coincide con #daw
+    daw: `
+        <section id="daw">
+            <h2>🌐 Desarrollo de Aplicaciones Web (DAW)</h2>
+            <p>Especialidad centrada en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones que se ejecutan en navegadores y servidores.</p>
 
-      <h3>📚 Tecnologías Esenciales</h3>
-      <ul>
-        <li>**HTML5:** Estructura de la web.</li>
-        <li>**CSS3:** Diseño, estilo y apariencia visual.</li>
-        <li>**JavaScript:** Interactividad y lógica del lado del cliente.</li>
-      </ul>
+            <h3>📚 Tecnologías Esenciales</h3>
+            <ul>
+                <li>**HTML5:** Estructura de la web.</li>
+                <li>**CSS3:** Diseño, estilo y apariencia visual.</li>
+                <li>**JavaScript:** Interactividad y lógica del lado del cliente.</li>
+            </ul>
 
-      <h3>🧪 Ejercicio Interactivo</h3>
-      <p>¿Cuál de estos lenguajes se usa para añadir interactividad en el Front-End?</p>
-      <select id="dawQuiz">
-        <option value="">Selecciona una opción</option>
-        <option value="PHP">PHP</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="Python">Python</option>
-      </select>
-      <button onclick="checkDawQuiz()">Comprobar</button>
-      <p id="dawFeedback"></p>
-    </section>
-  `,
+            <h3>🧪 Ejercicio Interactivo</h3>
+            <p>¿Cuál de estos lenguajes se usa para añadir interactividad en el Front-End?</p>
+            <select id="dawQuiz">
+                <option value="">Selecciona una opción</option>
+                <option value="PHP">PHP</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Python">Python</option>
+            </select>
+            <button onclick="checkDawQuiz()">Comprobar</button>
+            <p id="dawFeedback"></p>
+        </section>
+    `,
 
-  // DAM - Coincide con #dam
-  dam: `
-    <section id="dam">
-      <h2>💻 Desarrollo de Aplicaciones Multiplataforma (DAM)</h2>
-      <p>Especialidad centrada en la creación de aplicaciones informáticas que funcionan en múltiples sistemas operativos y dispositivos móviles.</p>
+    // DAM - Coincide con #dam
+    dam: `
+        <section id="dam">
+            <h2>💻 Desarrollo de Aplicaciones Multiplataforma (DAM)</h2>
+            <p>Especialidad centrada en la creación de aplicaciones informáticas que funcionan en múltiples sistemas operativos y dispositivos móviles.</p>
 
-      <h3>📚 Tecnologías Esenciales</h3>
-      <ul>
-        <li>**Java/Kotlin:** Lógica principal, especialmente en desarrollo Android.</li>
-        <li>**C# (.NET):** Aplicaciones de escritorio para Windows.</li>
-        <li>**XML / XAML:** Diseño de la Interfaz de Usuario (UI).</li>
-      </ul>
+            <h3>📚 Tecnologías Esenciales</h3>
+            <ul>
+                <li>**Java/Kotlin:** Lógica principal, especialmente en desarrollo Android.</li>
+                <li>**C# (.NET):** Aplicaciones de escritorio para Windows.</li>
+                <li>**XML / XAML:** Diseño de la Interfaz de Usuario (UI).</li>
+            </ul>
 
-      <h3>🧪 Ejercicio Interactivo</h3>
-      <p>¿Cuál de los siguientes lenguajes se usa comúnmente para la lógica principal en DAM?</p>
-      <select id="damQuiz">
-        <option value="">Selecciona una opción</option>
-        <option value="HTML">HTML</option>
-        <option value="Java">Java</option>
-        <option value="Ruby">Ruby</option>
-      </select>
-      <button onclick="checkDamQuiz()">Comprobar</button>
-      <p id="damFeedback"></p>
-    </section>
-  `,
-  
-  // HERRAMIENTAS DEV - Coincide con #herramientas-dev
-  "herramientas-dev": `
-    <section id="herramientas-dev">
-      <h2>🛠️ Herramientas de Desarrollo (IDEs y VSC)</h2>
-      <p>Visual Studio Code (VSC) es el editor más popular. Mediante extensiones, se convierte en un IDE completo para DAW y DAM.</p>
-      
-      <h3>Extensiones Clave de VSC</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Extensiones Clave</th>
-            <th>Función</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>**Live Server**</td>
-            <td>Previsualización instantánea de proyectos web (DAW).</td>
-          </tr>
-          <tr>
-            <td>**Language Packs**</td>
-            <td>Soporte para lenguajes como Java o C# (DAM).</td>
-          </tr>
-          <tr>
-            <td>**GitLens**</td>
-            <td>Integración avanzada con el control de versiones Git.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  `,
+            <h3>🧪 Ejercicio Interactivo</h3>
+            <p>¿Cuál de los siguientes lenguajes se usa comúnmente para la lógica principal en DAM?</p>
+            <select id="damQuiz">
+                <option value="">Selecciona una opción</option>
+                <option value="HTML">HTML</option>
+                <option value="Java">Java</option>
+                <option value="Ruby">Ruby</option>
+            </select>
+            <button onclick="checkDamQuiz()">Comprobar</button>
+            <p id="damFeedback"></p>
+        </section>
+    `,
+    
+    // HERRAMIENTAS DEV - Coincide con #herramientas-dev
+    "herramientas-dev": `
+        <section id="herramientas-dev">
+            <h2>🛠️ Herramientas de Desarrollo (IDEs y VSC)</h2>
+            <p>Visual Studio Code (VSC) es el editor más popular. Mediante extensiones, se convierte en un IDE completo para DAW y DAM.</p>
+            
+            <h3>Extensiones Clave de VSC</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Extensiones Clave</th>
+                        <th>Función</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>**Live Server**</td>
+                        <td>Previsualización instantánea de proyectos web (DAW).</td>
+                    </tr>
+                    <tr>
+                        <td>**Language Packs**</td>
+                        <td>Soporte para lenguajes como Java o C# (DAM).</td>
+                    </tr>
+                    <tr>
+                        <td>**GitLens**</td>
+                        <td>Integración avanzada con el control de versiones Git.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    `,
 
-  // COMANDOS LINUX - Coincide con #linux-detallado
-  "linux-detallado": `
-    <section id="linux-detallado">
-      <h2>🐧 Comandos Esenciales de Linux</h2>
-      <p>Linux es el sistema operativo estándar para servidores. Aprender comandos es crucial para el despliegue y administración de sistemas.</p>
-      
-      <h3>Comando Fundamental</h3>
-      <div class="terminal-command">
-        sudo apt update && sudo apt upgrade -y
-      </div>
-      <p>Este comando actualiza la lista de paquetes y luego instala las nuevas versiones de forma automática.</p>
-      
-      <h3>Ejercicio interactivo</h3>
-      <label for="linuxInput">Escribe el comando completo que usarías para instalar el navegador Firefox:</label><br>
-      <input type="text" id="linuxInput" placeholder="Ej: sudo apt install [paquete]" />
-      <button onclick="checkLinuxCommand()">Comprobar</button>
-      <p id="linuxFeedback"></p>
-    </section>
-  `,
+    // COMANDOS LINUX - Coincide con #linux-detallado
+    "linux-detallado": `
+        <section id="linux-detallado">
+            <h2>🐧 Comandos Esenciales de Linux</h2>
+            <p>Linux es el sistema operativo estándar para servidores. Aprender comandos es crucial para el despliegue y administración de sistemas.</p>
+            
+            <h3>Comando Fundamental</h3>
+            <div class="terminal-command">
+                sudo apt update && sudo apt upgrade -y
+            </div>
+            <p>Este comando actualiza la lista de paquetes y luego instala las nuevas versiones de forma automática.</p>
+            
+            <h3>Ejercicio interactivo</h3>
+            <label for="linuxInput">Escribe el comando completo que usarías para instalar el navegador Firefox:</label><br>
+            <input type="text" id="linuxInput" placeholder="Ej: sudo apt install [paquete]" />
+            <button onclick="checkLinuxCommand()">Comprobar</button>
+            <p id="linuxFeedback"></p>
+        </section>
+    `,
 
-  // FLUJO GIT - Coincide con #flujo-git
-  "flujo-git": `
-    <section id="flujo-git">
-      <h2>🚀 Flujo de Despliegue y Control de Versiones</h2>
-      <p>**Git** es esencial para el control de versiones y **Vercel/Netlify** para desplegar proyectos web.</p>
+    // FLUJO GIT - Coincide con #flujo-git
+    "flujo-git": `
+        <section id="flujo-git">
+            <h2>🚀 Flujo de Despliegue y Control de Versiones</h2>
+            <p>**Git** es esencial para el control de versiones y **Vercel/Netlify** para desplegar proyectos web.</p>
 
-      <h3>Flujo Git Básico</h3>
-      <p>Para guardar y subir tu código a un repositorio:</p>
-      <div class="terminal-command">
-        git init<br>
-        git add .<br>
-        git commit -m "Mensaje de tu cambio"<br>
-        git push origin main
-      </div>
-      <button onclick="copyCode(this)">Copiar comandos</button>
+            <h3>Flujo Git Básico</h3>
+            <p>Para guardar y subir tu código a un repositorio:</p>
+            <div class="terminal-command">
+                git init<br>
+                git add .<br>
+                git commit -m "Mensaje de tu cambio"<br>
+                git push origin main
+            </div>
+            <button onclick="copyCode(this)">Copiar comandos</button>
 
-      <h3>Despliegue Web (DAW)</h3>
-      <p>Plataformas como Vercel o Netlify permiten desplegar tu aplicación web (DAW) automáticamente desde tu repositorio de Git.</p>
-    </section>
-  `,
+            <h3>Despliegue Web (DAW)</h3>
+            <p>Plataformas como Vercel o Netlify permiten desplegar tu aplicación web (DAW) automáticamente desde tu repositorio de Git.</p>
+        </section>
+    `,
 
-  // BLOG - Coincide con #blog
-  "blog": `
-    <section id="blog">
-      <h2>📰 Mi Blog de Programación</h2>
-      <p>Aquí compartiré artículos, tutoriales y reflexiones sobre el desarrollo web (DAW), aplicaciones multiplataforma (DAM) y las últimas tendencias tecnológicas.</p>
+    // BLOG - Coincide con #blog
+    "blog": `
+        <section id="blog">
+            <h2>📰 Mi Blog de Programación</h2>
+            <p>Aquí compartiré artículos, tutoriales y reflexiones sobre el desarrollo web (DAW), aplicaciones multiplataforma (DAM) y las últimas tendencias tecnológicas.</p>
 
-      <div class="blog-container">
-        <article class="blog-post">
-          <h3>Comandos Linux: El ABC para el Servidor</h3>
-          <p class="post-meta">Publicado por Luciano F.A.G. el 15 de Octubre, 2025</p>
-          <p>Un repaso a los comandos esenciales como **cd**, **ls**, y **sudo**, cruciales para la administración de cualquier entorno de desarrollo o servidor.</p>
-          <a href="#linux-detallado" class="read-more-btn">Leer Tutorial Completo</a>
-        </article>
+            <div class="blog-container">
+                <article class="blog-post">
+                    <h3>Comandos Linux: El ABC para el Servidor</h3>
+                    <p class="post-meta">Publicado por Luciano F.A.G. el 15 de Octubre, 2025</p>
+                    <p>Un repaso a los comandos esenciales como **cd**, **ls**, y **sudo**, cruciales para la administración de cualquier entorno de desarrollo o servidor.</p>
+                    <a href="#linux-detallado" class="read-more-btn">Leer Tutorial Completo</a>
+                </article>
 
-        <article class="blog-post">
-          <h3>DAW vs DAM: ¿Cuál elegir en 2026?</h3>
-          <p class="post-meta">Publicado por Luciano F.A.G. el 20 de Septiembre, 2025</p>
-          <p>Analizamos las salidas profesionales, salarios y tecnologías clave para ayudarte a decidir entre el desarrollo web y el desarrollo de aplicaciones nativas.</p>
-          <a href="#que-es-dam-daw" class="read-more-btn">Leer Análisis Completo</a>
-        </article>
-        
-        </div>
-    </section>
-  `,
-  
-  // ESTÁNDARES W3C - Coincide con #estandares-w3c
-  "estandares-w3c": `
-    <section id="estandares-w3c">
-      <h2>🌐 Accesibilidad y Estándares W3C (WCAG)</h2>
-      <p>La accesibilidad web (DAW) y la usabilidad (DAM) son fundamentales. Los estándares **WCAG (Web Content Accessibility Guidelines)** son la referencia mundial.</p>
+                <article class="blog-post">
+                    <h3>DAW vs DAM: ¿Cuál elegir en 2026?</h3>
+                    <p class="post-meta">Publicado por Luciano F.A.G. el 20 de Septiembre, 2025</p>
+                    <p>Analizamos las salidas profesionales, salarios y tecnologías clave para ayudarte a decidir entre el desarrollo web y el desarrollo de aplicaciones nativas.</p>
+                    <a href="#que-es-dam-daw" class="read-more-btn">Leer Análisis Completo</a>
+                </article>
+                
+                </div>
+        </section>
+    `,
+    
+    // ESTÁNDARES W3C - Coincide con #estandares-w3c
+    "estandares-w3c": `
+        <section id="estandares-w3c">
+            <h2>🌐 Accesibilidad y Estándares W3C (WCAG)</h2>
+            <p>La accesibilidad web (DAW) y la usabilidad (DAM) son fundamentales. Los estándares **WCAG (Web Content Accessibility Guidelines)** son la referencia mundial.</p>
 
-      <h3>Demostración de Carga de Datos en Vivo</h3>
-      <p>Esta sección demuestra una habilidad Full-Stack (Back-End Serverless) al intentar cargar un dato directamente de una URL de prueba, burlando la política CORS mediante una **solución de proxy estable**.</p>
+            <h3>Demostración de Carga de Datos en Vivo</h3>
+            <p>Esta sección demuestra una habilidad Full-Stack (Back-End Serverless) al intentar cargar un dato directamente de una URL de prueba, burlando la política CORS mediante una **solución de proxy estable**.</p>
 
-      <button onclick="fetchW3cStandards()" class="w3c-btn">Actualizar Estándares Ahora</button>
-      
-      <div id="w3c-standards-container" style="margin-top: 20px;">
-        <p>Pulsa el botón para cargar la información.</p>
-      </div>
-    </section>
-  `, 
+            <button onclick="fetchW3cStandards()" class="w3c-btn">Actualizar Estándares Ahora</button>
+            
+            <div id="w3c-standards-container" style="margin-top: 20px;">
+                <p>Pulsa el botón para cargar la información.</p>
+            </div>
+        </section>
+    `, 
 
-  // ✅ NUEVA SECCIÓN: SQL BÁSICO (Actualizada con JOIN)
-  "sql-basico": `
-    <section id="sql-basico">
-      <h2>🗄️ SQL Básico: La Persistencia de Datos</h2>
-      <p>SQL (**Structured Query Language**) es el lenguaje estándar para manejar bases de datos relacionales. Su fortaleza radica en la capacidad de relacionar datos de múltiples tablas.</p>
-      
-      <h3>Comandos Fundamentales (CRUD y JOIN)</h3>
-      
-      <p>El comando clave para relacionar tablas es **JOIN**, y el más común es el **INNER JOIN**, que devuelve filas cuando hay coincidencias en ambas tablas.</p>
-      
-      <table class="sql-table">
-        <thead>
-          <tr>
-            <th>Comando</th>
-            <th>Uso</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>**SELECT**</td>
-            <td>Leer datos de tablas.</td>
-          </tr>
-          <tr>
-            <td>**INSERT INTO**</td>
-            <td>Crear/añadir nuevos registros.</td>
-          </tr>
-          <tr>
-            <td>**INNER JOIN**</td>
-            <td>Combina filas de dos tablas basándose en una columna relacionada (llave).</td>
-          </tr>
-        </tbody>
-      </table>
+    // ✅ NUEVA SECCIÓN: SQL BÁSICO (Actualizada con JOIN)
+    "sql-basico": `
+        <section id="sql-basico">
+            <h2>🗄️ SQL Básico: La Persistencia de Datos</h2>
+            <p>SQL (**Structured Query Language**) es el lenguaje estándar para manejar bases de datos relacionales. Su fortaleza radica en la capacidad de relacionar datos de múltiples tablas.</p>
+            
+            <h3>Comandos Fundamentales (CRUD y JOIN)</h3>
+            
+            <p>El comando clave para relacionar tablas es **JOIN**, y el más común es el **INNER JOIN**, que devuelve filas cuando hay coincidencias en ambas tablas.</p>
+            
+            <table class="sql-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>**SELECT**</td>
+                        <td>Leer datos de tablas.</td>
+                    </tr>
+                    <tr>
+                        <td>**INSERT INTO**</td>
+                        <td>Crear/añadir nuevos registros.</td>
+                    </tr>
+                    <tr>
+                        <td>**INNER JOIN**</td>
+                        <td>Combina filas de dos tablas basándose en una columna relacionada (llave).</td>
+                    </tr>
+                </tbody>
+            </table>
 
-      <h3>🧪 Ejercicio 1: SELECT</h3>
-      <p>Imagina que tienes una tabla de 'alumnos'. Escribe la consulta SQL para obtener **solo la columna 'nombre'** de todos los alumnos:</p>
-      
-      <div class="code-editor">
-        <textarea id="sqlInput" placeholder="Ej: SELECT * FROM tabla;"></textarea>
-        <button onclick="checkSqlQuery()">Comprobar SELECT</button>
-      </div>
-      <p id="sqlFeedback"></p>
+            <h3>🧪 Ejercicio 1: SELECT</h3>
+            <p>Imagina que tienes una tabla de 'alumnos'. Escribe la consulta SQL para obtener **solo la columna 'nombre'** de todos los alumnos:</p>
+            
+            <div class="code-editor">
+                <textarea id="sqlInput" placeholder="Ej: SELECT * FROM tabla;"></textarea>
+                <button onclick="checkSqlQuery()">Comprobar SELECT</button>
+            </div>
+            <p id="sqlFeedback"></p>
 
-      <h3>🧪 Ejercicio 2: INNER JOIN</h3>
-      <p>Tienes dos tablas: **'alumnos'** y **'clases'**. Ambas comparten la columna **'id_clase'**. Escribe el comando SQL completo para unir ambas tablas con un INNER JOIN:</p>
-      
-      <div class="code-editor">
-        <textarea id="joinInput" placeholder="Ej: SELECT * FROM tabla1 INNER JOIN tabla2 ON tabla1.clave = tabla2.clave;"></textarea>
-        <button onclick="checkJoinQuery()">Comprobar JOIN</button>
-      </div>
-      <p id="joinFeedback"></p>
-    </section>
-  `,
+            <h3>🧪 Ejercicio 2: INNER JOIN</h3>
+            <p>Tienes dos tablas: **'alumnos'** y **'clases'**. Ambas comparten la columna **'id_clase'**. Escribe el comando SQL completo para unir ambas tablas con un INNER JOIN:</p>
+            
+            <div class="code-editor">
+                <textarea id="joinInput" placeholder="Ej: SELECT * FROM tabla1 INNER JOIN tabla2 ON tabla1.clave = tabla2.clave;"></textarea>
+                <button onclick="checkJoinQuery()">Comprobar JOIN</button>
+            </div>
+            <p id="joinFeedback"></p>
+        </section>
+    `,
 
-  // ✅ NUEVA SECCIÓN: POO EN JAVASCRIPT
-  "poo-js": `
-    <section id="poo-js">
-      <h2>🧠 POO en JavaScript: Clases y Objetos</h2>
-      <p>La **Programación Orientada a Objetos (POO)** organiza el código alrededor de 'objetos' que contienen datos y funciones. En JavaScript, usamos la sintaxis de **clases** para crear planos (blueprints) de estos objetos.</p>
-      
-      <h3>Conceptos Clave de POO</h3>
-      <ul>
-        <li>**Clase:** El plano para crear objetos (Ej: Persona).</li>
-        <li>**Objeto (Instancia):** Un elemento creado a partir de la clase (Ej: Luciano, María).</li>
-        <li>**Método:** Una función definida dentro de una clase.</li>
-        <li>**Herencia:** Una clase nueva que toma propiedades y métodos de una clase ya existente.</li>
-      </ul>
-      
-      <h3>Ejemplo de Clase en JS</h3>
-      <p>Una clase simple para representar un **Desarrollador**:</p>
-      
-      <div class="terminal-command">
-        class Desarrollador {
-          constructor(nombre, rol) {
-            this.nombre = nombre;
-            this.rol = rol;
-          }
-        
-          presentarse() {
-            return \`Hola, soy \${this.nombre} y mi rol es \${this.rol}.\`;
-          }
-        }
-        
-        // Crear una instancia (un objeto)
-        const devLuciano = new Desarrollador('Luciano F.', 'Full-Stack');
-      </div>
-      <button onclick="copyCode(this)">Copiar Código</button>
-      
-      <h3>🧪 Ejercicio Interactivo</h3>
-      <p>Crea una nueva instancia de la clase **Desarrollador** llamada **devMaria** con el nombre 'María J.' y el rol 'Front-End'.</p>
-      
-      <div class="code-editor">
-        <textarea id="pooInput" placeholder="Ej: const miObjeto = new Clase(...);"></textarea>
-        <button onclick="checkPooQuery()">Comprobar POO</button>
-      </div>
-      <p id="pooFeedback"></p>
-    </section>
-  `, 
+    // ✅ NUEVA SECCIÓN: POO EN JAVASCRIPT
+    "poo-js": `
+        <section id="poo-js">
+            <h2>🧠 POO en JavaScript: Clases y Objetos</h2>
+            <p>La **Programación Orientada a Objetos (POO)** organiza el código alrededor de 'objetos' que contienen datos y funciones. En JavaScript, usamos la sintaxis de **clases** para crear planos (blueprints) de estos objetos.</p>
+            
+            <h3>Conceptos Clave de POO</h3>
+            <ul>
+                <li>**Clase:** El plano para crear objetos (Ej: Persona).</li>
+                <li>**Objeto (Instancia):** Un elemento creado a partir de la clase (Ej: Luciano, María).</li>
+                <li>**Método:** Una función definida dentro de una clase.</li>
+                <li>**Herencia:** Una clase nueva que toma propiedades y métodos de una clase ya existente.</li>
+            </ul>
+            
+            <h3>Ejemplo de Clase en JS</h3>
+            <p>Una clase simple para representar un **Desarrollador**:</p>
+            
+            <div class="terminal-command">
+                class Desarrollador {
+                    constructor(nombre, rol) {
+                        this.nombre = nombre;
+                        this.rol = rol;
+                    }
+                
+                    presentarse() {
+                        return \`Hola, soy \${this.nombre} y mi rol es \${this.rol}.\`;
+                    }
+                }
+                
+                // Crear una instancia (un objeto)
+                const devLuciano = new Desarrollador('Luciano F.', 'Full-Stack');
+            </div>
+            <button onclick="copyCode(this)">Copiar Código</button>
+            
+            <h3>🧪 Ejercicio Interactivo</h3>
+            <p>Crea una nueva instancia de la clase **Desarrollador** llamada **devMaria** con el nombre 'María J.' y el rol 'Front-End'.</p>
+            
+            <div class="code-editor">
+                <textarea id="pooInput" placeholder="Ej: const miObjeto = new Clase(...);"></textarea>
+                <button onclick="checkPooQuery()">Comprobar POO</button>
+            </div>
+            <p id="pooFeedback"></p>
+        </section>
+    `, 
 
-  // SOBRE MÍ - Coincide con #sobre-mi
-  "sobre-mi": `
-    <section id="sobre-mi">
-      <h2>👤 Sobre Mí</h2>
-      <p>Hola, soy **Luciano Francisco Amaya Gutiérrez**. Soy un estudiante apasionado por la programación.</p>
-      <p>Esta guía interactiva es parte de mi proyecto educativo para consolidar conocimientos clave de los ciclos DAM y DAW.</p>
-    </section>
-  `
+    // SOBRE MÍ - Coincide con #sobre-mi
+    "sobre-mi": `
+        <section id="sobre-mi">
+            <h2>👤 Sobre Mí</h2>
+            <p>Hola, soy **Luciano Francisco Amaya Gutiérrez**. Soy un estudiante apasionado por la programación.</p>
+            <p>Esta guía interactiva es parte de mi proyecto educativo para consolidar conocimientos clave de los ciclos DAM y DAW.</p>
+        </section>
+    `,
+
+    
+    // =============================================================
+    // ✅ NUEVAS SECCIONES FORMATIVAS (Novato a Experto)
+    // =============================================================
+
+    // 📚 Nivel Principiante (Fundamentos)
+    "conceptos-base": `
+        <section id="conceptos-base">
+            <h2>📚 Conceptos Base: El Vocabulario del Programador</h2>
+            <p>Antes de escribir código, debemos entender el panorama general. Dominar estos términos es el primer paso para interpretar cualquier proyecto.</p>
+            
+            <h3>Frontend y Backend</h3>
+            <table class="concept-table">
+                <thead>
+                    <tr>
+                        <th>Concepto</th>
+                        <th>Función Principal</th>
+                        <th>Tecnologías Comunes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>**Frontend**</td>
+                        <td>La parte que el usuario ve e interactúa directamente. Se ejecuta en el navegador.</td>
+                        <td>HTML, CSS, JavaScript (React, Vue, Angular).</td>
+                    </tr>
+                    <tr>
+                        <td>**Backend**</td>
+                        <td>El "cerebro" o servidor. Procesa la lógica, gestiona la seguridad y almacena los datos.</td>
+                        <td>Node.js, Python (Django/Flask), Java, PHP.</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Términos Clave</h3>
+            <ul>
+                <li>**API (Application Programming Interface):** Un puente que permite a dos sistemas (ej. Frontend y Backend) hablar entre sí.</li>
+                <li>**Base de Datos (BBDD):** Donde se almacena la información de manera persistente (ej. MySQL, MongoDB).</li>
+            </ul>
+        </section>
+    `,
+
+    "algoritmos-flujo": `
+        <section id="algoritmos-flujo">
+            <h2>🧠 Lógica y Algoritmos (Pensamiento Computacional)</h2>
+            <p>Un **algoritmo** es una secuencia de pasos finitos y bien definidos para resolver un problema. Es la habilidad más importante que aprenderás.</p>
+            
+            <h3>Conceptos de Flujo</h3>
+            <ol>
+                <li>**Secuencia:** Las instrucciones se ejecutan una tras otra en orden.</li>
+                <li>**Selección (If/Else):** El código toma una decisión basada en una condición. Ejemplo: *Si (edad > 18), entonces permitir acceso.*</li>
+                <li>**Iteración (Bucles):** Se repite un bloque de código varias veces. Ejemplo: *Mostrar la lista de 10 usuarios.*</li>
+            </ol>
+
+            <p>Practica la escritura de **pseudocódigo** (código en lenguaje natural) antes de codificar para simplificar problemas complejos.</p>
+        </section>
+    `,
+
+    "introduccion-html": `
+        <section id="introduccion-html">
+            <h2>📝 HTML5: Estructura, Semántica y Accesibilidad</h2>
+            <p>HTML no es un lenguaje de programación, sino de **marcado**. Define la estructura y el significado (**semántica**) del contenido web.</p>
+            
+            <h3>Semántica Importante</h3>
+            <p>Usar las etiquetas correctas ayuda a los navegadores y a los lectores de pantalla a entender tu contenido (accesibilidad W3C):</p>
+            <table class="html-table">
+                <tr><td>**&lt;header&gt;**</td><td>Contiene el logo, el título y la navegación principal.</td></tr>
+                <tr><td>**&lt;nav&gt;**</td><td>Contiene los enlaces principales del sitio.</td></tr>
+                <tr><td>**&lt;main&gt;**</td><td>Contiene el contenido único y central de la página. Solo debe haber uno.</td></tr>
+                <tr><td>**&lt;section&gt;** / **&lt;article&gt;**</td><td>Contenedores para agrupar temas o artículos relacionados.</td></tr>
+            </table>
+        </section>
+    `,
+
+    // 🧑‍💻 Nivel Intermedio (Desarrollo Profesional)
+    "metodologia-agile": `
+        <section id="metodologia-agile">
+            <h2>🏃 Metodologías Ágiles (SCRUM y Kanban)</h2>
+            <p>En el desarrollo profesional (tanto en DAM como en DAW), se usa la metodología **Ágil** para gestionar proyectos de manera flexible e incremental, a través de ciclos cortos (Sprints).</p>
+            
+            <h3>SCRUM: El Marco más Usado</h3>
+            <ul>
+                <li>**Sprint:** Ciclo de trabajo de 1 a 4 semanas donde se entrega un incremento funcional.</li>
+                <li>**Product Backlog:** Lista priorizada de todo el trabajo por hacer (historias de usuario).</li>
+                <li>**Daily Standup (Reunión Diaria):** Reunión corta donde cada miembro dice: ¿Qué hice ayer? ¿Qué haré hoy? ¿Qué impedimentos tengo?</li>
+            </ul>
+            <p>SCRUM prioriza la colaboración, la entrega frecuente y la adaptación constante al cambio.</p>
+        </section>
+    `,
+
+    "seguridad-basica": `
+        <section id="seguridad-basica">
+            <h2>🔒 Seguridad Web: Prevención de Ataques Comunes</h2>
+            <p>La seguridad es responsabilidad de todo programador (Back-End, Front-End y BBDD). Nunca confíes en la información que proviene del usuario.</p>
+            
+            <h3>Amenazas Críticas</h3>
+            <p>Debes conocer y saber cómo prevenir:</p>
+            <ul>
+                <li>**SQL Injection:** Un atacante inserta código SQL malicioso en un campo de entrada para robar o modificar datos. **Prevención:** Usar consultas preparadas o parametrizadas.</li>
+                <li>**XSS (Cross-Site Scripting):** Un atacante inyecta código JavaScript en una web legítima para robar sesiones de usuario. **Prevención:** Sanitizar (limpiar) y escapar todo el *input* del usuario antes de mostrarlo.</li>
+            </ul>
+        </section>
+    `,
+
+    "patrones-diseño": `
+        <section id="patrones-diseño">
+            <h2>📐 Patrones de Diseño (Estructura POO)</h2>
+            <p>Los patrones de diseño son soluciones probadas a problemas comunes. Te ayudan a escribir código más modular, reutilizable y fácil de mantener (Principios SOLID).</p>
+            
+            <h3>Patrón Singleton (Creacional)</h3>
+            <p><strong>Propósito:</strong> Garantiza que una clase solo tenga **una instancia** y proporciona un punto de acceso global a ella. Útil para gestionar la conexión a una Base de Datos o la configuración.</p>
+            
+            <h3>Patrón Factory (Creacional)</h3>
+            <p><strong>Propósito:</strong> Proporciona una interfaz para crear objetos en una superclase, pero permite a las subclases alterar el tipo de objetos que se crean. Útil para la creación flexible de objetos (ej. crear diferentes tipos de vehículos).</p>
+        </section>
+    `,
+
+    // 🚀 Nivel Avanzado (Maestría y Despliegue)
+    "docker-contenedores": `
+        <section id="docker-contenedores">
+            <h2>🐳 Contenedores: Docker y la Virtualización Ligera</h2>
+            <p>Docker es la herramienta estándar para el despliegue avanzado. Resuelve el problema del "¿Funciona en mi máquina, pero no en el servidor?".</p>
+            
+            <h3>Conceptos Clave</h3>
+            <ul>
+                <li>**Contenedor:** Una unidad de software estandarizada que empaqueta código y todas sus dependencias para que la aplicación se ejecute de forma rápida y fiable en cualquier entorno.</li>
+                <li>**Imagen:** Es el "plano" (o plantilla) inmutable que contiene todo lo necesario para ejecutar el código.</li>
+                <li>**Docker Compose:** Una herramienta para definir y ejecutar aplicaciones multi-contenedor (ej. base de datos + backend + frontend).</li>
+            </ul>
+            <p>Usar Docker asegura que tu entorno de desarrollo es idéntico a tu entorno de producción.</p>
+        </section>
+    `,
+    
+    "optimizacion-web": `
+        <section id="optimizacion-web">
+            <h2>⚡ Optimización y Rendimiento Web (Core Vitals)</h2>
+            <p>La velocidad de carga y la experiencia del usuario (UX) son críticas. Google mide el rendimiento con las **Core Web Vitals**.</p>
+            
+            <h3>Claves de Optimización</h3>
+            <ol>
+                <li>**Compresión:** Usar Gzip o Brotli para reducir el tamaño de los archivos CSS, JS y HTML que se envían al navegador.</li>
+                <li>**Imágenes:** Optimizar el tamaño de las imágenes y usar formatos modernos como WebP.</li>
+                <li>**Caché:** Configurar el servidor para que el navegador guarde (cachee) los archivos estáticos y no tenga que descargarlos en cada visita.</li>
+            </ol>
+            <p>Herramientas como **Lighthouse** te ayudan a auditar estos puntos.</p>
+        </section>
+    `,
+
+    "typescript-modular": `
+        <section id="typescript-modular">
+            <h2>🔷 TypeScript e Ingeniería de Software</h2>
+            <p>TypeScript (TS) es un "superset" de JavaScript que añade **tipado estático**. Es decir, puedes definir si una variable es un número, una cadena, etc.</p>
+            
+            <h3>Ventajas para Proyectos Grandes</h3>
+            <ul>
+                <li>**Menos Errores:** Atrapa errores de tipo en tiempo de desarrollo, antes de que lleguen a producción.</li>
+                <li>**Mayor Legibilidad:** El código es más claro al saber exactamente qué tipo de dato debe recibir una función.</li>
+                <li>**Herramientas Avanzadas:** Mejora la autocompletado y la refactorización en editores como VS Code.</li>
+            </ul>
+            <p>Es la herramienta preferida en las grandes empresas para construir aplicaciones escalables (DAW Avanzado).</p>
+        </section>
+    `
 };
 
 // ✅ Renderizar sección según el hash
 function renderSection(hash) {
-  // Obtenemos la clave, si no hay hash, usamos 'home'
-  const key = hash.replace("#", "") || "home"; 
-  const contentElement = document.getElementById("content");
-  
-  // Cargamos la sección si existe. Si la clave no existe, cargamos 'home' como respaldo.
-  contentElement.innerHTML = sections[key] || sections.home;
+    // Obtenemos la clave, si no hay hash, usamos 'home'
+    const key = hash.replace("#", "") || "home"; 
+    const contentElement = document.getElementById("content");
+    
+    // Cargamos la sección si existe. Si la clave no existe, cargamos 'home' como respaldo.
+    contentElement.innerHTML = sections[key] || sections.home;
 }
 
 // ✅ Eventos para cargar contenido dinámico
