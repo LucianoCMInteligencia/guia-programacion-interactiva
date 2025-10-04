@@ -1,7 +1,66 @@
+// =============================================================
+// ✅ NUEVA FUNCIÓN: CARGAR DATOS DE W3C USANDO EL PROXY DE VERCEL
+// =============================================================
+async function fetchW3cStandards() {
+  const container = document.getElementById("w3c-standards-container");
+  container.innerHTML = 'Cargando información actualizada de W3C... (Esto puede tardar unos segundos)';
+  
+  try {
+    // 1. Llama al proxy que creaste en 'api/w3c-proxy.js'
+    const response = await fetch('/api/w3c-proxy'); 
+    
+    if (!response.ok) {
+        throw new Error('El proxy de Vercel falló o la respuesta no es 200.');
+    }
+    
+    const data = await response.json();
+    
+    const rawHtml = data.htmlContent; 
+
+    // 2. LÓGICA DE EXTRACCIÓN SIMPLE (Scraping): Intentamos extraer el título.
+    const startTag = '<h1 class="page-title">'; 
+    const endTag = '</h1>';
+
+    const startIndex = rawHtml.indexOf(startTag);
+    const endIndex = rawHtml.indexOf(endTag, startIndex); 
+    
+    let extractedContent = "No se pudo extraer el título del HTML (Las clases pueden haber cambiado).";
+
+    if (startIndex !== -1 && endIndex !== -1) {
+      extractedContent = rawHtml.substring(startIndex + startTag.length, endIndex).trim();
+    }
+    // --- FIN LÓGICA DE EXTRACCIÓN ---
+
+    // 3. Inyectar el resultado de ÉXITO
+    container.innerHTML = `
+      <div class="w3c-card success">
+        <h3>✅ Datos Actualizados desde W3C</h3>
+        <p><strong>URL de origen:</strong> <code>https://www.w3.org/WAI/standards-guidelines/es</code></p>
+        <p><strong>Último Título Reportado:</strong> <strong class="title-scraped">${extractedContent}</strong></p>
+        <p>Esta demostración prueba la comunicación **Full-Stack** a través de tu **Vercel Function (Proxy)**.</p>
+      </div>
+    `;
+    
+  } catch (error) {
+    console.error('Error en fetchW3cStandards:', error);
+    // 4. Inyectar el resultado de ERROR
+    container.innerHTML = `
+        <div class="w3c-card error">
+            <h3>❌ Error al Cargar Estándares</h3>
+            <p>Ocurrió un fallo de conexión o de red. Asegúrate de que tu **Vercel Function** (el archivo <code>api/w3c-proxy.js</code>) esté desplegada correctamente.</p>
+            <p>Detalle: ${error.message}</p>
+        </div>
+    `;
+  }
+}
+// =============================================================
+// FIN NUEVA FUNCIÓN
+// =============================================================
+
+
 // ✅ Función para copiar código al portapapeles
 function copyCode(button) {
   // 1. Buscamos el elemento de código que siempre está JUSTO antes del botón.
-  //    Puede ser un <pre> o un <div class="terminal-command">
   const codeContainer = button.previousElementSibling;
   
   // 2. Si el contenedor existe, obtenemos su texto y limpiamos espacios.
@@ -230,6 +289,48 @@ const sections = {
     </section>
   `,
 
+  // BLOG - Coincide con #blog
+  "blog": `
+    <section id="blog">
+      <h2>📰 Mi Blog de Programación</h2>
+      <p>Aquí compartiré artículos, tutoriales y reflexiones sobre el desarrollo web (DAW), aplicaciones multiplataforma (DAM) y las últimas tendencias tecnológicas.</p>
+
+      <div class="blog-container">
+        <article class="blog-post">
+          <h3>Comandos Linux: El ABC para el Servidor</h3>
+          <p class="post-meta">Publicado por Luciano F.A.G. el 15 de Octubre, 2025</p>
+          <p>Un repaso a los comandos esenciales como **cd**, **ls**, y **sudo**, cruciales para la administración de cualquier entorno de desarrollo o servidor.</p>
+          <a href="#linux-detallado" class="read-more-btn">Leer Tutorial Completo</a>
+        </article>
+
+        <article class="blog-post">
+          <h3>DAW vs DAM: ¿Cuál elegir en 2026?</h3>
+          <p class="post-meta">Publicado por Luciano F.A.G. el 20 de Septiembre, 2025</p>
+          <p>Analizamos las salidas profesionales, salarios y tecnologías clave para ayudarte a decidir entre el desarrollo web y el desarrollo de aplicaciones nativas.</p>
+          <a href="#que-es-dam-daw" class="read-more-btn">Leer Análisis Completo</a>
+        </article>
+        
+        </div>
+    </section>
+  `,
+  
+  // ✅ NUEVA SECCIÓN: ESTÁNDARES W3C - Coincide con #estandares-w3c
+  "estandares-w3c": `
+    <section id="estandares-w3c">
+      <h2>🌐 Accesibilidad y Estándares W3C (WCAG)</h2>
+      <p>La accesibilidad web (DAW) y la usabilidad (DAM) son fundamentales. Los estándares **WCAG (Web Content Accessibility Guidelines)** son la referencia mundial.</p>
+
+      <h3>Demostración de Carga de Datos en Vivo</h3>
+      <p>Esta sección demuestra una habilidad Full-Stack (Back-End Serverless) al intentar cargar un dato directamente de la web del W3C, burlando la política CORS mediante una **Vercel Function (Proxy)**.</p>
+
+      <button onclick="fetchW3cStandards()" class="w3c-btn">Actualizar Estándares Ahora</button>
+      
+      <div id="w3c-standards-container" style="margin-top: 20px;">
+        <p>Pulsa el botón para cargar la información.</p>
+      </div>
+    </section>
+  `,
+
   // SOBRE MÍ - Coincide con #sobre-mi
   "sobre-mi": `
     <section id="sobre-mi">
@@ -246,7 +347,7 @@ function renderSection(hash) {
   const key = hash.replace("#", "") || "home"; 
   const contentElement = document.getElementById("content");
   
-  // Cargamos la sección si existe, si no, volvemos a 'home'
+  // Cargamos la sección si existe. Si la clave no existe, cargamos 'home' como respaldo.
   contentElement.innerHTML = sections[key] || sections.home;
 }
 
