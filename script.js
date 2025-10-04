@@ -25,7 +25,8 @@ async function fetchW3cStandards() {
         const rawHtml = await response.text(); 
         
         // LÓGICA DE EXTRACCIÓN SIMPLE (Scraping): Intentamos extraer el título.
-        const extractionMarker = "Pautas de Accesibilidad para el Contenido Web";
+        // CORRECCIÓN: Usamos una frase más corta para asegurar la coincidencia.
+        const extractionMarker = "Pautas de Accesibilidad";
         
         let extractedContent = "No se pudo encontrar el fragmento clave en el HTML cargado.";
         let successMessage = "Esta sección demuestra la lógica de Front-End al usar un proxy para superar el bloqueo CORS.";
@@ -61,59 +62,59 @@ async function fetchW3cStandards() {
 
 // ✅ Función para copiar código al portapapeles
 function copyCode(button) {
-  const codeContainer = button.previousElementSibling;
-  const code = codeContainer ? codeContainer.textContent.trim() : '';
+    const codeContainer = button.previousElementSibling;
+    const code = codeContainer ? codeContainer.textContent.trim() : '';
 
-  if (code) {
-    navigator.clipboard.writeText(code).then(() => {
-      const originalText = button.textContent;
-      button.textContent = "¡Copiado! ✅";
-      setTimeout(() => button.textContent = originalText, 2000);
-    }).catch(err => {
-      console.error('Error al copiar el texto: ', err);
-      alert('Error al copiar el texto.');
-    });
-  } else {
-    console.error("No se encontró el contenedor de código.");
-  }
+    if (code) {
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = "¡Copiado! ✅";
+            setTimeout(() => button.textContent = originalText, 2000);
+        }).catch(err => {
+            console.error('Error al copiar el texto: ', err);
+            alert('Error al copiar el texto.');
+        });
+    } else {
+        console.error("No se encontró el contenedor de código.");
+    }
 }
 
 // ✅ Función para validar comando Linux
 function checkLinuxCommand() {
-  const input = document.getElementById("linuxInput").value.trim().toLowerCase();
-  const feedback = document.getElementById("linuxFeedback");
-  if (input === "sudo apt install firefox") {
-    feedback.textContent = "✅ ¡Correcto! El comando instala el paquete.";
-    feedback.style.color = "green";
-  } else {
-    feedback.textContent = "❌ Intenta de nuevo. Recuerda la sintaxis: sudo apt install [paquete].";
-    feedback.style.color = "red";
-  }
+    const input = document.getElementById("linuxInput").value.trim().toLowerCase();
+    const feedback = document.getElementById("linuxFeedback");
+    if (input === "sudo apt install firefox") {
+        feedback.textContent = "✅ ¡Correcto! El comando instala el paquete.";
+        feedback.style.color = "green";
+    } else {
+        feedback.textContent = "❌ Intenta de nuevo. Recuerda la sintaxis: sudo apt install [paquete].";
+        feedback.style.color = "red";
+    }
 }
 
 // ✅ Funciones para ejercicios DAM y DAW
 function checkDamQuiz() {
-  const value = document.getElementById("damQuiz").value;
-  const feedback = document.getElementById("damFeedback");
-  if (value === "Java") {
-    feedback.textContent = "✅ ¡Correcto! Java se usa ampliamente en DAM y desarrollo Android.";
-    feedback.style.color = "green";
-  } else {
-    feedback.textContent = "❌ Intenta de nuevo. Uno de esos es un lenguaje clave en DAM.";
-    feedback.style.color = "red";
-  }
+    const value = document.getElementById("damQuiz").value;
+    const feedback = document.getElementById("damFeedback");
+    if (value === "Java") {
+        feedback.textContent = "✅ ¡Correcto! Java se usa ampliamente en DAM y desarrollo Android.";
+        feedback.style.color = "green";
+    } else {
+        feedback.textContent = "❌ Intenta de nuevo. Uno de esos es un lenguaje clave en DAM.";
+        feedback.style.color = "red";
+    }
 }
 
 function checkDawQuiz() {
-  const value = document.getElementById("dawQuiz").value;
-  const feedback = document.getElementById("dawFeedback");
-  if (value === "JavaScript") {
-    feedback.textContent = "✅ ¡Correcto! JavaScript es esencial en el Front-End web.";
-    feedback.style.color = "green";
-  } else {
-    feedback.textContent = "❌ Intenta de nuevo. Uno de esos lenguajes es el núcleo de la interactividad web.";
-    feedback.style.color = "red";
-  }
+    const value = document.getElementById("dawQuiz").value;
+    const feedback = document.getElementById("dawFeedback");
+    if (value === "JavaScript") {
+        feedback.textContent = "✅ ¡Correcto! JavaScript es esencial en el Front-End web.";
+        feedback.style.color = "green";
+    } else {
+        feedback.textContent = "❌ Intenta de nuevo. Uno de esos lenguajes es el núcleo de la interactividad web.";
+        feedback.style.color = "red";
+    }
 }
 
 // ✅ Función para validar el ejercicio de SQL (SELECT)
@@ -172,7 +173,7 @@ function checkPooQuery() {
 
 
 // =============================================================
-// ✅ Contenido dinámico por sección (ACTUALIZADO con POO)
+// ✅ Contenido dinámico por sección
 // =============================================================
 const sections = {
   // HOME - Coincide con #home
