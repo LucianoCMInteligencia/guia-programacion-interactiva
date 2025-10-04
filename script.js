@@ -1,47 +1,44 @@
-// Funciones de interactividad
-// ----------------------------
-
 // ✅ Función para copiar código al portapapeles
 function copyCode(button) {
-  // Busca el elemento de código que precede al botón
+  // Buscamos el elemento <pre> o .terminal-command anterior
   const codeContainer = button.previousElementSibling;
-  // Extrae el texto. Usamos .trim() para limpiar espacios y saltos de línea.
   const code = codeContainer ? codeContainer.textContent.trim() : '';
 
   if (code) {
-    // Usar el API del portapapeles
     navigator.clipboard.writeText(code).then(() => {
       const originalText = button.textContent;
       button.textContent = "¡Copiado! ✅";
       setTimeout(() => button.textContent = originalText, 2000);
     }).catch(err => {
       console.error('Error al copiar el texto: ', err);
+      alert('Error al copiar el texto.');
     });
   }
 }
 
-// ✅ Función para validar comando Linux (Mantiene la interactividad)
+// ✅ Función para validar comando Linux
 function checkLinuxCommand() {
+  // Añadimos .toLowerCase() para aceptar mayúsculas/minúsculas
   const input = document.getElementById("linuxInput").value.trim().toLowerCase();
   const feedback = document.getElementById("linuxFeedback");
   if (input === "sudo apt install firefox") {
-    feedback.textContent = "✅ ¡Correcto! El comando para instalar Firefox es 'sudo apt install firefox'.";
+    feedback.textContent = "✅ ¡Correcto! El comando instala el paquete.";
     feedback.style.color = "green";
   } else {
-    feedback.textContent = "❌ Intenta de nuevo. Recuerda usar 'sudo apt install' seguido del paquete.";
+    feedback.textContent = "❌ Intenta de nuevo. Recuerda la sintaxis: sudo apt install [paquete].";
     feedback.style.color = "red";
   }
 }
 
-// ✅ Funciones para ejercicios DAM y DAW (Mantiene la interactividad)
+// ✅ Funciones para ejercicios DAM y DAW
 function checkDamQuiz() {
   const value = document.getElementById("damQuiz").value;
   const feedback = document.getElementById("damFeedback");
   if (value === "Java") {
-    feedback.textContent = "✅ ¡Correcto! Java es un lenguaje clave en DAM para lógica de negocio y Android.";
+    feedback.textContent = "✅ ¡Correcto! Java se usa ampliamente en DAM y desarrollo Android.";
     feedback.style.color = "green";
   } else {
-    feedback.textContent = "❌ Intenta de nuevo. (Pista: Es un lenguaje multi-plataforma).";
+    feedback.textContent = "❌ Intenta de nuevo. Uno de esos es un lenguaje clave en DAM.";
     feedback.style.color = "red";
   }
 }
@@ -50,122 +47,73 @@ function checkDawQuiz() {
   const value = document.getElementById("dawQuiz").value;
   const feedback = document.getElementById("dawFeedback");
   if (value === "JavaScript") {
-    feedback.textContent = "✅ ¡Correcto! JavaScript es el lenguaje esencial de la interactividad Front-End.";
+    feedback.textContent = "✅ ¡Correcto! JavaScript es esencial en el Front-End web.";
     feedback.style.color = "green";
   } else {
-    feedback.textContent = "❌ Intenta de nuevo. (Pista: Es el único lenguaje que el navegador entiende de forma nativa para la interactividad).";
+    feedback.textContent = "❌ Intenta de nuevo. Uno de esos lenguajes es el núcleo de la interactividad web.";
     feedback.style.color = "red";
   }
 }
 
-
-// Contenido dinámico por sección (Objeto profesional y consolidado)
-// -------------------------------------------------------------
-
+// ✅ Contenido dinámico por sección (Objeto Consolidado y Correcto)
 const sections = {
   home: `
     <section id="home">
-      <h2>👋 Bienvenido a tu Guía Profesional de Programación</h2>
-      <p>Esta guía interactiva contiene toda la información esencial para tu formación como programador, cubriendo los ciclos de <strong>Desarrollo de Aplicaciones Multiplataforma (DAM)</strong> y <strong>Desarrollo de Aplicaciones Web (DAW)</strong>, además de las herramientas y el ciclo de vida de un proyecto de software.</p>
-      <p>Usa el menú superior para acceder al contenido detallado, incluyendo listas de códigos, IDEs recomendados y explicaciones de comandos fundamentales.</p>
+      <h2>👋 Bienvenido a Mi Guía Interactiva</h2>
+      <p>Esta guía te acompañará paso a paso en tu formación como programador. Navega por el menú superior para explorar los temas clave de los ciclos DAM y DAW, desde los fundamentos hasta el control de versiones y el despliegue profesional.</p>
+      <p>¡Comencemos!</p>
     </section>
   `,
 
-  "que-es-dam-daw": `
-    <section id="que-es-dam-daw">
-      <h2>DAM vs DAW: La Distinción Fundamental 🎯</h2>
-      <p><strong>DAM (Desarrollo de Aplicaciones Multiplataforma)</strong> y <strong>DAW (Desarrollo de Aplicaciones Web)</strong> son dos Ciclos Formativos de Grado Superior enfocados en el desarrollo de software, pero con especializaciones claras.</p>
-
-      <h3>Desarrollo de Aplicaciones Multiplataforma (DAM) 💻📱</h3>
-      <p>Se enfoca en la creación, implementación y mantenimiento de aplicaciones informáticas para diversos entornos y sistemas operativos.</p>
-      <ul>
-        <li><strong>Enfoque Principal:</strong> Aplicaciones de Escritorio (Windows, Linux, macOS) y Aplicaciones Móviles Nativas (Android, iOS).</li>
-        <li><strong>Salidas Profesionales:</strong> Desarrollador de aplicaciones móviles, Programador multiplataforma, Técnico en sistemas ERP/CRM.</li>
-      </ul>
-
-      <h3>Desarrollo de Aplicaciones Web (DAW) 🌐</h3>
-      <p>Se especializa en el diseño, desarrollo, implementación y mantenimiento de sitios web y aplicaciones informáticas en entornos web.</p>
-      <ul>
-        <li><strong>Enfoque Principal:</strong> Desarrollo Web Front-End (la interfaz) y Back-End (la lógica del servidor).</li>
-        <li><strong>Salidas Profesionales:</strong> Desarrollador Web Front-End, Desarrollador Web Back-End, Desarrollador Full-Stack.</li>
-      </ul>
-
-      <h3>Tabla: Diferencia Clave</h3>
+  introduccion: `
+    <section id="introduccion">
+      <h2>🎓 DAM vs DAW: Elige tu camino</h2>
+      <p>DAM (Desarrollo de Aplicaciones Multiplataforma) y DAW (Desarrollo de Aplicaciones Web) son especialidades con un enfoque distinto:</p>
+      
+      <h3>🎯 Enfoque Principal</h3>
       <table>
-          <thead>
-              <tr>
-                  <th>Ciclo</th>
-                  <th>Entorno Principal</th>
-                  <th>¿Dónde se ejecuta la aplicación?</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><strong>DAM</strong></td>
-                  <td>Multiplataforma</td>
-                  <td>Directamente en el sistema operativo del dispositivo (móvil o escritorio).</td>
-              </tr>
-              <tr>
-                  <td><strong>DAW</strong></td>
-                  <td>Web</td>
-                  <td>En un navegador de internet.</td>
-              </tr>
-          </tbody>
+        <thead>
+          <tr>
+            <th>Ciclo</th>
+            <th>Entorno Principal</th>
+            <th>Ejecución</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>**DAM**</td>
+            <td>Multiplataforma (Escritorio/Móvil)</td>
+            <td>Se instala y ejecuta directamente en el sistema operativo del dispositivo.</td>
+          </tr>
+          <tr>
+            <td>**DAW**</td>
+            <td>Web</td>
+            <td>Se ejecuta en un navegador de internet (Front-End) o en un servidor (Back-End).</td>
+          </tr>
+        </tbody>
       </table>
+      
+      <h3>📚 Lenguajes Clave</h3>
+      <p>DAM se enfoca en lenguajes como **Java/Kotlin** (Android) y **C#** (.NET), mientras que DAW se centra en **HTML**, **CSS**, **JavaScript** y lenguajes de servidor como **PHP** o **Python**.</p>
     </section>
   `,
 
   daw: `
     <section id="daw">
-      <h2>🌐 Códigos Fundamentales para DAW (Desarrollo Web)</h2>
-      <p>La programación web profesional se basa en la combinación de lenguajes para el cliente (Front-End) y para el servidor (Back-End).</p>
+      <h2>🌐 Desarrollo de Aplicaciones Web (DAW)</h2>
+      <p>Especialidad centrada en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones que se ejecutan en navegadores (Front-End) y servidores (Back-End).</p>
 
-      <h3>Guía de Códigos Esenciales (Front-End & Back-End)</h3>
-      <table>
-          <thead>
-              <tr>
-                  <th>Código</th>
-                  <th>Tipo</th>
-                  <th>Uso Esencial</th>
-                  <th>Ejemplo de Uso Básico</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><strong>HTML5</strong></td>
-                  <td>Front-End (Estructura)</td>
-                  <td>Construir la <strong>estructura</strong> y el contenido base de la web (esqueleto).</td>
-                  <td><code>&lt;button id="saludar"&gt;Haz clic aquí&lt;/button&gt;</code>.</td>
-              </tr>
-              <tr>
-                  <td><strong>CSS3</strong></td>
-                  <td>Front-End (Estilo)</td>
-                  <td>Dar <strong>diseño y apariencia visual</strong> a los elementos HTML (colores, fuentes, responsive design).</td>
-                  <td><code>#saludar { background-color: blue; color: white; padding: 10px; }</code>.</td>
-              </tr>
-              <tr>
-                  <td><strong>JavaScript (JS)</strong></td>
-                  <td>Front-End (Lógica)</td>
-                  <td>Añadir <strong>interactividad</strong> en el navegador, validar datos y manipular la interfaz.</td>
-                  <td><code>document.getElementById('saludar').addEventListener('click', function() { alert('¡Hola!'); });</code>.</td>
-              </tr>
-              <tr>
-                  <td><strong>PHP, Python o Node.js</strong></td>
-                  <td>Back-End (Lógica)</td>
-                  <td>Escribir la <strong>lógica del servidor</strong>, gestionar usuarios, seguridad y procesamiento de datos.</td>
-                  <td>Un <em>script</em> que recibe un usuario y contraseña y lo verifica.</td>
-              </tr>
-              <tr>
-                  <td><strong>SQL</strong></td>
-                  <td>Bases de Datos</td>
-                  <td>Lenguaje para <strong>crear, consultar y modificar</strong> la información almacenada en el servidor (MySQL, PostgreSQL).</td>
-                  <td><code>SELECT nombre FROM clientes WHERE edad > 30;</code></td>
-              </tr>
-          </tbody>
-      </table>
+      <h3>📚 Tecnologías Esenciales</h3>
+      <ul>
+        <li>**HTML5:** Estructura de la web.</li>
+        <li>**CSS3:** Diseño, estilo y apariencia visual.</li>
+        <li>**JavaScript:** Interactividad, funcionalidad y lógica del lado del cliente.</li>
+        <li>**PHP/Python/Node.js:** Lógica del lado del servidor (Back-End).</li>
+        <li>**SQL:** Gestión de bases de datos.</li>
+      </ul>
 
-      <h3>🎓 Ejercicio (Front-End)</h3>
-      <p>¿Cuál de estos lenguajes se usa en el desarrollo Front-End para añadir interactividad?</p>
+      <h3>🧪 Ejercicio Interactivo</h3>
+      <p>¿Cuál de estos lenguajes se usa para añadir interactividad en el Front-End?</p>
       <select id="dawQuiz">
         <option value="">Selecciona una opción</option>
         <option value="PHP">PHP</option>
@@ -179,55 +127,20 @@ const sections = {
 
   dam: `
     <section id="dam">
-      <h2>💻 Códigos Fundamentales para DAM (Multiplataforma)</h2>
-      <p>La programación multiplataforma se enfoca en la lógica que se ejecuta dentro del dispositivo (móvil o escritorio) y su interacción con el sistema operativo.</p>
+      <h2>💻 Desarrollo de Aplicaciones Multiplataforma (DAM)</h2>
+      <p>Especialidad centrada en la creación de aplicaciones informáticas que funcionan en múltiples sistemas operativos (Windows, Linux, macOS) y dispositivos móviles (Android, iOS).</p>
 
-      <h3>Guía de Códigos Esenciales (Lógica y Datos)</h3>
-      <table>
-          <thead>
-              <tr>
-                  <th>Código</th>
-                  <th>Tipo</th>
-                  <th>Entorno Principal</th>
-                  <th>Propósito en el Proyecto Básico</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><strong>Kotlin / Java</strong></td>
-                  <td>Lógica Principal (Android)</td>
-                  <td>Multiplataforma / Móvil (Android)</td>
-                  <td>Escribe la <strong>lógica central</strong> de la aplicación y se usa para construir apps Android nativas.</td>
-              </tr>
-              <tr>
-                  <td><strong>C# (C Sharp)</strong></td>
-                  <td>Lógica Principal (.NET)</td>
-                  <td>Escritorio (Windows)</td>
-                  <td>Lenguaje fundamental para desarrollar <strong>aplicaciones de escritorio en Windows</strong> (con el framework .NET).</td>
-              </tr>
-              <tr>
-                  <td><strong>XML / XAML</strong></td>
-                  <td>Interfaz de Usuario</td>
-                  <td>Multiplataforma / Escritorio</td>
-                  <td>Define el <strong>diseño de la pantalla</strong> de la aplicación (similar a HTML, pero para apps).</td>
-              </tr>
-              <tr>
-                  <td><strong>SQL (SQLite)</strong></td>
-                  <td>Persistencia de Datos</td>
-                  <td>Bases de Datos Locales</td>
-                  <td>Se usa para <strong>guardar datos directamente en el dispositivo</strong> (base de datos local) para que la app funcione sin internet.</td>
-              </tr>
-              <tr>
-                  <td><strong>JSON</strong></td>
-                  <td>Intercambio de Datos</td>
-                  <td>Front-End & Back-End</td>
-                  <td>Formato estándar para <strong>intercambiar datos</strong> con servidores externos (APIs).</td>
-              </tr>
-          </tbody>
-      </table>
+      <h3>📚 Tecnologías Esenciales</h3>
+      <ul>
+        <li>**Java/Kotlin:** Lógica principal, especialmente en desarrollo Android.</li>
+        <li>**C# (.NET):** Aplicaciones de escritorio para Windows y entornos empresariales.</li>
+        <li>**XML / XAML:** Diseño de la Interfaz de Usuario (UI) en Android y C#.</li>
+        <li>**SQL (SQLite):** Persistencia de datos local en las aplicaciones.</li>
+        <li>**JSON:** Intercambio de datos con servicios web externos (APIs).</li>
+      </ul>
 
-      <h3>🎓 Ejercicio (Multiplataforma)</h3>
-      <p>¿Cuál de los siguientes lenguajes se usa comúnmente como base para la lógica en DAM (Android/Backend)?</p>
+      <h3>🧪 Ejercicio Interactivo</h3>
+      <p>¿Cuál de los siguientes lenguajes se usa comúnmente para la lógica principal en DAM?</p>
       <select id="damQuiz">
         <option value="">Selecciona una opción</option>
         <option value="HTML">HTML</option>
@@ -238,144 +151,53 @@ const sections = {
       <p id="damFeedback"></p>
     </section>
   `,
-
+  
   "herramientas-dev": `
     <section id="herramientas-dev">
-      <h2>🛠️ IDEs y Entorno de Desarrollo Profesional</h2>
-      <p>Un <strong>IDE (Entorno de Desarrollo Integrado)</strong> es la herramienta principal que usarás para escribir, editar y depurar tu código.</p>
-
-      <h3>1. El Editor/IDE Más Recomendado: Visual Studio Code (VSC)</h3>
-      <p><strong>Visual Studio Code (VS Code)</strong> es la herramienta más popular en la industria. Funciona como un editor de código muy potente que se transforma en un IDE completo y ligero gracias a su sistema de extensiones.</p>
+      <h2>🛠️ Herramientas de Desarrollo (IDEs y VSC)</h2>
+      <p>Tu entorno de desarrollo integrado (IDE) es tu estación de trabajo. La herramienta más popular y flexible es **Visual Studio Code (VSC)**.</p>
       
+      <h3>VS Code: El Editor que se Convierte en IDE</h3>
+      <p>VSC es ligero y, mediante extensiones, se adapta a cualquier lenguaje (DAW o DAM).</p>
       <table>
-          <thead>
-              <tr>
-                  <th>Característica</th>
-                  <th>Beneficio para el Programador</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>Ligero y Rápido</td>
-                  <td>Consume menos recursos que un IDE tradicional.</td>
-              </tr>
-              <tr>
-                  <td>Multiplataforma</td>
-                  <td>Funciona en Windows, macOS y Linux.</td>
-              </tr>
-              <tr>
-                  <td>Sistema de Extensiones</td>
-                  <td>Permite añadir soporte para lenguajes (Java, Python, C#), depuradores e integración con Git.</td>
-              </tr>
-          </tbody>
+        <thead>
+          <tr>
+            <th>Extensiones Clave</th>
+            <th>Función</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>**Live Server**</td>
+            <td>Previsualización instantánea de HTML/CSS/JS (DAW).</td>
+          </tr>
+          <tr>
+            <td>**Language Packs** (Java, C#)</td>
+            <td>Soporte para compilación, autocompletado y depuración (DAM).</td>
+          </tr>
+          <tr>
+            <td>**GitLens**</td>
+            <td>Integración avanzada con el control de versiones Git.</td>
+          </tr>
+        </tbody>
       </table>
-
-      <h3>2. IDEs Específicos para DAM</h3>
-      <p>Para el desarrollo más complejo de aplicaciones nativas, se suelen usar IDEs tradicionales:</p>
-      <ul>
-        <li><strong>IntelliJ IDEA</strong> (o Android Studio): El mejor soporte para Kotlin/Java y el desarrollo Android.</li>
-        <li><strong>Visual Studio</strong> (el IDE completo): Esencial para el desarrollo de aplicaciones empresariales en el ecosistema C# y .NET.</li>
-      </ul>
     </section>
   `,
 
-  "linux-detallado": `
-    <section id="linux-detallado">
-      <h2>🐧 Módulo: La Terminal de Linux para Programadores</h2>
-      <p>¡Hola, futuros desarrolladores! Como vuestro profesor, os diré que la terminal de Linux es vuestra <strong>navaja suiza profesional</strong>. En DAW, la usaréis para administrar servidores y en DAM, para configurar entornos de trabajo. ¡Dominarla es obligatorio!</p>
-
-      <h3>Comandos Esenciales: Tu Caja de Herramientas de Desarrollo ⚙️</h3>
-      <p>Aquí tenéis los comandos más usados en el día a día para navegar, gestionar archivos e instalar herramientas.</p>
-      <table>
-          <thead>
-              <tr>
-                  <th>Comando</th>
-                  <th>Función</th>
-                  <th>Uso Profesional (DAM/DAW)</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><strong>pwd</strong></td>
-                  <td>Saber dónde estás</td>
-                  <td>Verificar la ruta actual de tu proyecto antes de ejecutar un comando Git.</td>
-              </tr>
-              <tr>
-                  <td><strong>ls -l</strong></td>
-                  <td>Listar contenido detallado</td>
-                  <td>Inspeccionar los archivos del servidor para ver permisos y fechas de modificación.</td>
-              </tr>
-              <tr>
-                  <td><strong>cd carpeta</strong></td>
-                  <td>Moverse entre directorios</td>
-                  <td>Navegar rápidamente a la carpeta del proyecto Back-End o del entorno de desarrollo.</td>
-              </tr>
-              <tr>
-                  <td><strong>mkdir nombre</strong></td>
-                  <td>Crear una carpeta</td>
-                  <td>Iniciar la estructura de un nuevo proyecto (ej: 'mi-app-android').</td>
-              </tr>
-              <tr>
-                  <td><strong>touch archivo.ext</strong></td>
-                  <td>Crear un archivo vacío</td>
-                  <td>Crear archivos de configuración o código rápido (ej: 'Dockerfile').</td>
-              </tr>
-              <tr>
-                  <td><strong>sudo apt install [paquete]</strong></td>
-                  <td>Instalar software</td>
-                  <td>Instalar gestores de bases de datos (MySQL), librerías de Python o, como en el ejercicio, un navegador (Firefox).</td>
-              </tr>
-          </tbody>
-      </table>
-
-      <hr style="margin: 25px 0;">
-
-      <h3>Desglose Detallado de la Instalación y Actualización</h3>
-      <p>El comando <code>sudo apt install firefox</code> es la respuesta al ejercicio, pero <code>sudo apt update && sudo apt upgrade -y</code> es fundamental para mantener tu entorno de desarrollo o servidor (en DAW/DAM) actualizado y seguro.</p>
-
-      <h4>Comando de Ejemplo: Instalar Firefox (La respuesta al Quiz)</h4>
-      <div class="terminal-command">
-        sudo apt install firefox
-      </div>
+  linux: `
+    <section id="linux">
+      <h2>🐧 Comandos Esenciales de Linux</h2>
+      <p>Linux es el sistema operativo estándar para servidores y desarrollo. Entender sus comandos es crucial para la administración de sistemas y el despliegue.</p>
       
-      <h4>Desglose del Comando de Mantenimiento Completo</h4>
-      <p>Analicemos la secuencia completa de mantenimiento que todo desarrollador debe conocer:</p>
-      <table>
-          <thead>
-              <tr>
-                  <th>Componente</th>
-                  <th>¿Qué es?</th>
-                  <th>Propósito o Función</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><strong>sudo</strong></td>
-                  <td>Super User Do (Administrador)</td>
-                  <td>Ejecuta comandos con privilegios de administrador.</td>
-              </tr>
-              <tr>
-                  <td><strong>apt update</strong></td>
-                  <td>Advanced Packaging Tool (Actualizar)</td>
-                  <td>Actualiza la <strong>lista</strong> de paquetes disponibles desde internet.</td>
-              </tr>
-              <tr>
-                  <td><strong>&&</strong></td>
-                  <td>Operador Encadenador</td>
-                  <td>Ejecuta el siguiente comando <strong>SOLO si el anterior fue exitoso</strong>.</td>
-              </tr>
-              <tr>
-                  <td><strong>apt upgrade -y</strong></td>
-                  <td>Advanced Packaging Tool (Instalar nuevas versiones)</td>
-                  <td>Instala las nuevas versiones de los programas que ya tienes. (-y confirma automáticamente).</td>
-              </tr>
-          </tbody>
-      </table>
-
-
-      <h3>🎓 Ejercicio Interactivo (Conservado)</h3>
-      <label for="linuxInput">Según la lista, ¿qué comando usarías para instalar Firefox?</label><br>
-      <input type="text" id="linuxInput" placeholder="Escribe aquí..." />
+      <h3>Comandos Básicos</h3>
+      <div class="terminal-command">
+        sudo apt update && sudo apt upgrade -y
+      </div>
+      <p>Este comando actualiza la lista de paquetes (`update`) y luego instala las nuevas versiones (`upgrade`) de forma automática y con permisos de administrador (`sudo`).</p>
+      
+      <h3>Ejercicio interactivo</h3>
+      <label for="linuxInput">Escribe el comando completo que usarías para instalar el navegador Firefox:</label><br>
+      <input type="text" id="linuxInput" placeholder="Ej: sudo apt install [paquete]" />
       <button onclick="checkLinuxCommand()">Comprobar</button>
       <p id="linuxFeedback"></p>
     </section>
@@ -383,79 +205,46 @@ const sections = {
 
   "flujo-git": `
     <section id="flujo-git">
-      <h2>🚀 Flujo de Despliegue Profesional (Git, GitHub y Vercel)</h2>
-      <p>Como vuestro profesor, os enseño que el desarrollo profesional no termina con el código. Un proyecto debe ser gestionado y publicado. Aquí aprenderéis el flujo de trabajo moderno y esencial con Git.</p>
+      <h2>🚀 Flujo de Despliegue y Control de Versiones</h2>
+      <p>El control de versiones con **Git** y el despliegue son las fases finales de cualquier proyecto profesional.</p>
 
-      <h3>Paso 1: Control de Versiones con Git y GitHub</h3>
-      <p><strong>Git</strong> es la herramienta para rastrear y registrar los cambios en tu código. **GitHub** es la plataforma en la nube para almacenar el proyecto, colaborar y hacer copias de seguridad.</p>
+      <h3>Flujo Git Básico</h3>
+      <p>Para subir tu código a un repositorio como GitHub o GitLab:</p>
+      <div class="terminal-command">
+        git init<br>
+        git add .<br>
+        git commit -m "Mensaje de tu cambio"<br>
+        git push origin main
+      </div>
+      <button onclick="copyCode(this)">Copiar comandos</button>
 
-      <h4>El Ciclo de Trabajo Esencial (Add -> Commit -> Push)</h4>
-      <table>
-          <thead>
-              <tr>
-                  <th>Comando</th>
-                  <th>Función</th>
-                  <th>Explicación del Proceso</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><code>git add .</code></td>
-                  <td>**Preparar (Stage)**</td>
-                  <td>Le dice a Git: "Quiero incluir todos estos archivos modificados en la próxima versión que voy a guardar."</td>
-              </tr>
-              <tr>
-                  <td><code>git commit -m "Mensaje"</code></td>
-                  <td>**Guardar Versión (Commit)**</td>
-                  <td>Crea un punto de guardado inmutable (un *commit*) con los archivos preparados.</td>
-              </tr>
-              <tr>
-                  <td><code>git push</code></td>
-                  <td>**Publicar (Push)**</td>
-                  <td>Envía todos tus *commits* locales a tu repositorio en línea (GitHub), haciéndolos públicos.</td>
-              </tr>
-              <tr>
-                  <td><code>git pull origin main</code></td>
-                  <td>**Sincronizar (Pull)**</td>
-                  <td>Descarga e integra el trabajo que está en GitHub con tu copia local. (Es crucial para evitar errores de rechazo).</td>
-              </tr>
-          </tbody>
-      </table>
-      
-      <h3>Paso 2: Despliegue Continuo con Vercel</h3>
-      <p>Una vez que el código está en **GitHub**, servicios como **Vercel** se conectan a tu repositorio para publicar automáticamente tu web.</p>
-      
-      <h4>El Proceso de Vercel</h4>
-      <ol>
-        <li>**Conexión:** Conectas Vercel a tu cuenta de GitHub e importas el repositorio de tu guía.</li>
-        <li>**Despliegue Inicial:** Vercel toma el código y genera una URL pública.</li>
-        <li>**Actualización Automática:** Cada vez que haces un **`git push`** a GitHub, Vercel detecta el cambio, reconstruye la página y la actualiza automáticamente en la URL pública.</li>
-      </ol>
-      <p>¡Este flujo es lo que se conoce como **Integración y Despliegue Continuo (CI/CD)** y es el estándar de la industria!</p>
+      <h3>Despliegue (Hosting)</h3>
+      <p>Plataformas como **Vercel** o **Netlify** permiten desplegar tu aplicación web (DAW) automáticamente, conectándose a tu repositorio de Git y publicando los cambios en segundos.</p>
     </section>
   `,
 
   "sobre-mi": `
     <section id="sobre-mi">
-      <h2>Sobre Mí</h2>
-      <p>Hola, soy Luciano Francisco Amaya Gutiérrez. Soy estudiante apasionado por la programación y el desarrollo web. Esta guía interactiva es parte de mi proyecto educativo para compartir lo que he aprendido en detalle sobre DAM, DAW y el ciclo de vida de un proyecto de software.</p>
+      <h2>👤 Sobre Mí</h2>
+      <p>Hola, soy **Luciano Francisco Amaya Gutiérrez**. Soy un estudiante apasionado por la programación y el desarrollo de software.</p>
+      <p>Esta guía interactiva es parte de mi proyecto educativo para consolidar conocimientos clave de los ciclos DAM y DAW. Si tienes alguna sugerencia o encuentras algún error, ¡no dudes en notificarlo!</p>
     </section>
   `
-}; // <--- ¡Esta es la ÚNICA llave de cierre para el objeto sections!
-
-
-// Lógica de Renderizado
-// ---------------------
+};
 
 // ✅ Renderizar sección según el hash
 function renderSection(hash) {
-  // Elimina el '#' y usa 'home' por defecto si el hash está vacío
-  const key = hash.replace("#", "") || "home";
+  // Obtenemos la clave, si no hay hash, usamos 'home'
+  const key = hash.replace("#", "") || "home"; 
+  const contentElement = document.getElementById("content");
   
-  // Usa la sección correspondiente o la de 'home' si la clave no existe
-  document.getElementById("content").innerHTML = sections[key] || sections.home;
+  // Cargamos la sección si existe, si no, volvemos a 'home'
+  contentElement.innerHTML = sections[key] || sections.home;
 }
 
 // ✅ Eventos para cargar contenido dinámico
+// 1. Cuando la URL cambia (clic en un enlace del menú)
 window.addEventListener("hashchange", () => renderSection(location.hash));
+
+// 2. Cuando la página carga por primera vez (para mostrar el home al inicio)
 document.addEventListener("DOMContentLoaded", () => renderSection(location.hash));
