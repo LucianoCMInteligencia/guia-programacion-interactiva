@@ -1,0 +1,13 @@
+{
+  "name": "guia-programacion-interactiva",
+  "version": "1.0.0",
+  "description": "Guía interactiva de programación para DAM y DAW con funcionalidad Full-Stack.",
+  "main": "api/w3c-proxy.js",
+  "scripts": {
+    "start": "echo 'Deploying to Vercel'"
+  },
+  "dependencies": {
+    "axios": "^1.6.8" 
+    // ^ Esta línea le dice a Vercel que instale la librería axios
+  }
+}
