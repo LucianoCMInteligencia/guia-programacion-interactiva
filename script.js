@@ -1,75 +1,71 @@
 // =============================================================
-// ✅ NUEVA FUNCIÓN: CARGAR DATOS DE W3C USANDO EL PROXY DE VERCEL
+// ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN DE PROXY EXTERNO)
+// Solución definitiva para asegurar que la demo de "Carga de Datos" funcione
+// sin depender de la Vercel Function.
 // =============================================================
 async function fetchW3cStandards() {
-  const container = document.getElementById("w3c-standards-container");
-  container.innerHTML = 'Cargando información actualizada de W3C... (Esto puede tardar unos segundos)';
-  
-  try {
-    // 1. Llama al proxy que creaste en 'api/w3c-proxy.js'
-    const response = await fetch('/api/w3c-proxy'); 
+    const container = document.getElementById("w3c-standards-container");
+    container.innerHTML = 'Corriendo prueba de conexión...';
+
+    // URL que queremos cargar (W3C), bloqueada por CORS
+    const targetUrl = 'https://www.w3.org/WAI/standards-guidelines/es';
     
-    if (!response.ok) {
-        throw new Error('El proxy de Vercel falló o la respuesta no es 200.');
+    // Usamos el proxy público de CORS (corsproxy.io) para evitar el error ❌
+    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+
+    try {
+        // Hacemos la llamada al proxy externo para obtener el HTML de la web W3C
+        const response = await fetch(proxyUrl); 
+        
+        if (!response.ok) {
+            throw new Error(`Fallo en la conexión al proxy externo. Estado HTTP: ${response.status}`);
+        }
+        
+        // El proxy externo devuelve el HTML crudo
+        const rawHtml = await response.text(); 
+        
+        // LÓGICA DE EXTRACCIÓN SIMPLE (Scraping): Intentamos extraer el título.
+        const extractionMarker = "Pautas de Accesibilidad para el Contenido Web";
+        
+        let extractedContent = "No se pudo encontrar el fragmento clave en el HTML cargado.";
+        let successMessage = "Esta sección demuestra la lógica de Front-End al usar un proxy para superar el bloqueo CORS.";
+
+        if (rawHtml.includes(extractionMarker)) {
+            extractedContent = `**Título Encontrado:** "${extractionMarker}"`;
+            successMessage = "¡Perfecto! La conexión funcionó y extrajimos el título de la página del W3C.";
+        }
+
+        // Inyectar el resultado de ÉXITO
+        container.innerHTML = `
+            <div class="w3c-card success">
+                <h3>✅ Datos Actualizados desde W3C (Vía Proxy Estable)</h3>
+                <p><strong>URL de origen:</strong> <code>${targetUrl}</code></p>
+                <p>${successMessage}</p>
+                <p><strong>Verificación de Contenido:</strong> ${extractedContent}</p>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error en fetchW3cStandards:', error);
+        // Inyectar el resultado de ERROR
+        container.innerHTML = `
+            <div class="w3c-card error">
+                <h3>❌ Error Crítico de Conexión</h3>
+                <p>La conexión al proxy externo falló. Esto suele ser un problema de red o que el servicio de proxy está caído.</p>
+                <p>Detalle: ${error.message}</p>
+            </div>
+        `;
     }
-    
-    const data = await response.json();
-    
-    const rawHtml = data.htmlContent; 
-
-    // 2. LÓGICA DE EXTRACCIÓN SIMPLE (Scraping): Intentamos extraer el título.
-    const startTag = '<h1 class="page-title">'; 
-    const endTag = '</h1>';
-
-    const startIndex = rawHtml.indexOf(startTag);
-    const endIndex = rawHtml.indexOf(endTag, startIndex); 
-    
-    let extractedContent = "No se pudo extraer el título del HTML (Las clases pueden haber cambiado).";
-
-    if (startIndex !== -1 && endIndex !== -1) {
-      extractedContent = rawHtml.substring(startIndex + startTag.length, endIndex).trim();
-    }
-    // --- FIN LÓGICA DE EXTRACCIÓN ---
-
-    // 3. Inyectar el resultado de ÉXITO
-    container.innerHTML = `
-      <div class="w3c-card success">
-        <h3>✅ Datos Actualizados desde W3C</h3>
-        <p><strong>URL de origen:</strong> <code>https://www.w3.org/WAI/standards-guidelines/es</code></p>
-        <p><strong>Último Título Reportado:</strong> <strong class="title-scraped">${extractedContent}</strong></p>
-        <p>Esta demostración prueba la comunicación **Full-Stack** a través de tu **Vercel Function (Proxy)**.</p>
-      </div>
-    `;
-    
-  } catch (error) {
-    console.error('Error en fetchW3cStandards:', error);
-    // 4. Inyectar el resultado de ERROR
-    container.innerHTML = `
-        <div class="w3c-card error">
-            <h3>❌ Error al Cargar Estándares</h3>
-            <p>Ocurrió un fallo de conexión o de red. Asegúrate de que tu **Vercel Function** (el archivo <code>api/w3c-proxy.js</code>) esté desplegada correctamente.</p>
-            <p>Detalle: ${error.message}</p>
-        </div>
-    `;
-  }
 }
-// =============================================================
-// FIN NUEVA FUNCIÓN
-// =============================================================
 
 
 // ✅ Función para copiar código al portapapeles
 function copyCode(button) {
-  // 1. Buscamos el elemento de código que siempre está JUSTO antes del botón.
   const codeContainer = button.previousElementSibling;
-  
-  // 2. Si el contenedor existe, obtenemos su texto y limpiamos espacios.
   const code = codeContainer ? codeContainer.textContent.trim() : '';
 
   if (code) {
-    // 3. Usamos la API del portapapeles.
     navigator.clipboard.writeText(code).then(() => {
-      // 4. Cambiamos el texto del botón por 2 segundos.
       const originalText = button.textContent;
       button.textContent = "¡Copiado! ✅";
       setTimeout(() => button.textContent = originalText, 2000);
@@ -120,8 +116,63 @@ function checkDawQuiz() {
   }
 }
 
+// ✅ Función para validar el ejercicio de SQL (SELECT)
+function checkSqlQuery() {
+    const input = document.getElementById("sqlInput").value.trim();
+    const feedback = document.getElementById("sqlFeedback");
+    
+    // Normalización: minúsculas, elimina espacios extra, elimina punto y coma final
+    const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
+
+    // La respuesta correcta es "select nombre from alumnos"
+    if (normalizedInput === "select nombre from alumnos") {
+        feedback.textContent = "✅ ¡Correcto! Usas SELECT para leer y especificas la columna 'nombre' de la tabla 'alumnos'.";
+        feedback.style.color = "green";
+    } else {
+        feedback.textContent = "❌ Incorrecto. Recuerda la sintaxis: SELECT [columnas] FROM [tabla].";
+        feedback.style.color = "red";
+    }
+}
+
+// ✅ Función para validar el ejercicio de JOIN
+function checkJoinQuery() {
+    const input = document.getElementById("joinInput").value.trim();
+    const feedback = document.getElementById("joinFeedback");
+    
+    // Normalización: minúsculas, elimina espacios extra, elimina punto y coma final
+    const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
+
+    // Usamos una verificación más flexible para los términos clave
+    if (normalizedInput.includes('inner join') && normalizedInput.includes('alumnos') && normalizedInput.includes('clases') && normalizedInput.includes('id_clase')) {
+        feedback.textContent = "✅ ¡Correcto! Usaste INNER JOIN para conectar las tablas 'alumnos' y 'clases' usando la clave 'id_clase'. ¡Concepto esencial en DAM/DAW!";
+        feedback.style.color = "green";
+    } else {
+        feedback.textContent = "❌ Incorrecto. Recuerda la estructura básica del JOIN: SELECT * FROM Tabla1 INNER JOIN Tabla2 ON Tabla1.Clave = Tabla2.Clave.";
+        feedback.style.color = "red";
+    }
+}
+
+// ✅ Función para validar el ejercicio de POO (Clases)
+function checkPooQuery() {
+    const input = document.getElementById("pooInput").value.trim();
+    const feedback = document.getElementById("pooFeedback");
+    
+    // Normalización: minúsculas, elimina espacios extra, elimina punto y coma final
+    const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
+
+    // Verificamos los términos clave
+    if (normalizedInput.includes('const devmaria') && normalizedInput.includes('new desarrollador') && normalizedInput.includes('maría j.') && normalizedInput.includes('front-end')) {
+        feedback.textContent = "✅ ¡Excelente! Has creado una nueva instancia del objeto 'Desarrollador'. ¡Dominas la creación de objetos!";
+        feedback.style.color = "green";
+    } else {
+        feedback.textContent = "❌ Incorrecto. Recuerda la sintaxis: const [nombreVariable] = new [NombreClase]('[valor1]', '[valor2]');";
+        feedback.style.color = "red";
+    }
+}
+
+
 // =============================================================
-// ✅ Contenido dinámico por sección (CLAVES SINCRONIZADAS CON EL HTML)
+// ✅ Contenido dinámico por sección (ACTUALIZADO con POO)
 // =============================================================
 const sections = {
   // HOME - Coincide con #home
@@ -314,14 +365,14 @@ const sections = {
     </section>
   `,
   
-  // ✅ NUEVA SECCIÓN: ESTÁNDARES W3C - Coincide con #estandares-w3c
+  // ESTÁNDARES W3C - Coincide con #estandares-w3c
   "estandares-w3c": `
     <section id="estandares-w3c">
       <h2>🌐 Accesibilidad y Estándares W3C (WCAG)</h2>
       <p>La accesibilidad web (DAW) y la usabilidad (DAM) son fundamentales. Los estándares **WCAG (Web Content Accessibility Guidelines)** son la referencia mundial.</p>
 
       <h3>Demostración de Carga de Datos en Vivo</h3>
-      <p>Esta sección demuestra una habilidad Full-Stack (Back-End Serverless) al intentar cargar un dato directamente de la web del W3C, burlando la política CORS mediante una **Vercel Function (Proxy)**.</p>
+      <p>Esta sección demuestra una habilidad Full-Stack (Back-End Serverless) al intentar cargar un dato directamente de una URL de prueba, burlando la política CORS mediante una **solución de proxy estable**.</p>
 
       <button onclick="fetchW3cStandards()" class="w3c-btn">Actualizar Estándares Ahora</button>
       
@@ -329,7 +380,105 @@ const sections = {
         <p>Pulsa el botón para cargar la información.</p>
       </div>
     </section>
+  `, 
+
+  // ✅ NUEVA SECCIÓN: SQL BÁSICO (Actualizada con JOIN)
+  "sql-basico": `
+    <section id="sql-basico">
+      <h2>🗄️ SQL Básico: La Persistencia de Datos</h2>
+      <p>SQL (**Structured Query Language**) es el lenguaje estándar para manejar bases de datos relacionales. Su fortaleza radica en la capacidad de relacionar datos de múltiples tablas.</p>
+      
+      <h3>Comandos Fundamentales (CRUD y JOIN)</h3>
+      
+      <p>El comando clave para relacionar tablas es **JOIN**, y el más común es el **INNER JOIN**, que devuelve filas cuando hay coincidencias en ambas tablas.</p>
+      
+      <table class="sql-table">
+        <thead>
+          <tr>
+            <th>Comando</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>**SELECT**</td>
+            <td>Leer datos de tablas.</td>
+          </tr>
+          <tr>
+            <td>**INSERT INTO**</td>
+            <td>Crear/añadir nuevos registros.</td>
+          </tr>
+          <tr>
+            <td>**INNER JOIN**</td>
+            <td>Combina filas de dos tablas basándose en una columna relacionada (llave).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>🧪 Ejercicio 1: SELECT</h3>
+      <p>Imagina que tienes una tabla de 'alumnos'. Escribe la consulta SQL para obtener **solo la columna 'nombre'** de todos los alumnos:</p>
+      
+      <div class="code-editor">
+        <textarea id="sqlInput" placeholder="Ej: SELECT * FROM tabla;"></textarea>
+        <button onclick="checkSqlQuery()">Comprobar SELECT</button>
+      </div>
+      <p id="sqlFeedback"></p>
+
+      <h3>🧪 Ejercicio 2: INNER JOIN</h3>
+      <p>Tienes dos tablas: **'alumnos'** y **'clases'**. Ambas comparten la columna **'id_clase'**. Escribe el comando SQL completo para unir ambas tablas con un INNER JOIN:</p>
+      
+      <div class="code-editor">
+        <textarea id="joinInput" placeholder="Ej: SELECT * FROM tabla1 INNER JOIN tabla2 ON tabla1.clave = tabla2.clave;"></textarea>
+        <button onclick="checkJoinQuery()">Comprobar JOIN</button>
+      </div>
+      <p id="joinFeedback"></p>
+    </section>
   `,
+
+  // ✅ NUEVA SECCIÓN: POO EN JAVASCRIPT
+  "poo-js": `
+    <section id="poo-js">
+      <h2>🧠 POO en JavaScript: Clases y Objetos</h2>
+      <p>La **Programación Orientada a Objetos (POO)** organiza el código alrededor de 'objetos' que contienen datos y funciones. En JavaScript, usamos la sintaxis de **clases** para crear planos (blueprints) de estos objetos.</p>
+      
+      <h3>Conceptos Clave de POO</h3>
+      <ul>
+        <li>**Clase:** El plano para crear objetos (Ej: Persona).</li>
+        <li>**Objeto (Instancia):** Un elemento creado a partir de la clase (Ej: Luciano, María).</li>
+        <li>**Método:** Una función definida dentro de una clase.</li>
+        <li>**Herencia:** Una clase nueva que toma propiedades y métodos de una clase ya existente.</li>
+      </ul>
+      
+      <h3>Ejemplo de Clase en JS</h3>
+      <p>Una clase simple para representar un **Desarrollador**:</p>
+      
+      <div class="terminal-command">
+        class Desarrollador {
+          constructor(nombre, rol) {
+            this.nombre = nombre;
+            this.rol = rol;
+          }
+        
+          presentarse() {
+            return \`Hola, soy \${this.nombre} y mi rol es \${this.rol}.\`;
+          }
+        }
+        
+        // Crear una instancia (un objeto)
+        const devLuciano = new Desarrollador('Luciano F.', 'Full-Stack');
+      </div>
+      <button onclick="copyCode(this)">Copiar Código</button>
+      
+      <h3>🧪 Ejercicio Interactivo</h3>
+      <p>Crea una nueva instancia de la clase **Desarrollador** llamada **devMaria** con el nombre 'María J.' y el rol 'Front-End'.</p>
+      
+      <div class="code-editor">
+        <textarea id="pooInput" placeholder="Ej: const miObjeto = new Clase(...);"></textarea>
+        <button onclick="checkPooQuery()">Comprobar POO</button>
+      </div>
+      <p id="pooFeedback"></p>
+    </section>
+  `, 
 
   // SOBRE MÍ - Coincide con #sobre-mi
   "sobre-mi": `
