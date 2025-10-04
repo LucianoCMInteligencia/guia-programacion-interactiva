@@ -1,242 +1,72 @@
-/* ================================================= */
-/* ESTILOS BASE Y LAYOUT               */
-/* ================================================= */
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Guía Interactiva de Programación Profesional</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Mi Guía Interactiva de Programación</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">👋 Home</a></li>
+        <li><a href="#que-es-dam-daw">🎓 DAM vs DAW</a></li>
+        
+                                <li>
+          <span class="nav-category">📚 Nivel Principiante</span>
+          <ul>
+            <li><a href="#conceptos-base">Conceptos Base</a></li>
+            <li><a href="#algoritmos-flujo">Lógica y Algoritmos</a></li>
+            <li><a href="#introduccion-html">HTML Estructura</a></li>
+          </ul>
+        </li>
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4;
-  margin: 0;
-  padding: 0;
-  line-height: 1.6; /* Mejora la legibilidad del texto largo */
-  color: #333;
-}
+                                <li>
+          <span class="nav-category">🧑‍💻 Nivel Intermedio</span>
+          <ul>
+            <li><a href="#sql-basico">SQL y BBDD (JOIN)</a></li>
+            <li><a href="#poo-js">POO en JavaScript</a></li>
+            <li><a href="#patrones-diseño">Patrones de Diseño</a></li>
+            <li><a href="#metodologia-agile">Metodologías Ágiles</a></li>
+            <li><a href="#seguridad-basica">Seguridad Web</a></li>
+          </ul>
+        </li>
 
-header {
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px 0;
-  text-align: center;
-  position: sticky; /* Menú de navegación "pegajoso" para mejor UX */
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
+                                <li>
+          <span class="nav-category">🚀 Nivel Avanzado</span>
+          <ul>
+            <li><a href="#linux-detallado">Comandos Linux</a></li>
+            <li><a href="#docker-contenedores">Docker</a></li>
+            <li><a href="#optimizacion-web">Optimización Web</a></li>
+            <li><a href="#typescript-modular">TypeScript</a></li>
+          </ul>
+        </li>
 
-main {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 20px auto; /* Centrar el contenido y añadir espacio */
-}
+                                <li>
+          <span class="nav-category">⚙️ Utilidad</span>
+          <ul>
+            <li><a href="#herramientas-dev">Herramientas Dev</a></li>
+            <li><a href="#flujo-git">Flujo de Despliegue</a></li>
+            <li><a href="#estandares-w3c">Estándares W3C (Demo)</a></li>
+          </ul>
+        </li>
 
-section {
-  background-color: white;
-  margin-bottom: 25px;
-  padding: 30px; 
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
+                                <li><a href="#blog">📰 Blog</a></li>
+        <li><a href="#sobre-mi">👤 Sobre Mí</a></li>
 
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #2c3e50;
-  color: #ecf0f1;
-  margin-top: 30px;
-}
+      </ul>
+    </nav>
+  </header>
 
-/* ================================================= */
-/* NAVEGACIÓN Y TÍTULOS                */
-/* ================================================= */
+  <main id="content">
+      </main>
 
-nav ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap; 
-  justify-content: center;
-  gap: 10px 15px;
-  padding: 10px 0 0;
-  margin: 0;
-}
+  <footer>
+     <p>© 2025 Mi Guía Interactiva de Programación - Luciano Francisco Amaya Gutiérrez - Oct 2025</p> 
+  </footer>
 
-nav a {
-  color: #ecf0f1;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.3s, border-color 0.3s;
-  border: 1px solid transparent; 
-}
-
-/* Estilo para el enlace activo o al hacer hover */
-nav a:hover,
-nav a.active {
-  background-color: #34495e;
-  border-color: #2980b9;
-}
-
-h2 {
-  color: #2980b9;
-  border-bottom: 2px solid #ecf0f1;
-  padding-bottom: 10px;
-  margin-top: 0;
-}
-
-h3 {
-  color: #34495e;
-  margin-top: 25px;
-}
-
-
-/* ================================================= */
-/* FORMULARIOS, INPUTS Y BOTONES             */
-/* ================================================= */
-
-/* Estilos para campos de texto y select (Usados en los Quizzes) */
-input[type="text"],
-select {
-    width: 100%; 
-    max-width: 300px; /* Ancho máximo para no ser demasiado grandes */
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; 
-    font-size: 1em;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input[type="text"]:focus,
-select:focus {
-    border-color: #2980b9;
-    outline: none; 
-    box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
-}
-
-/* Estilos de Botones */
-button {
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  margin-top: 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.1s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-button:hover {
-  background-color: #27ae60;
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(1px);
-}
-
-
-/* ================================================= */
-/* CÓDIGO, TERMINAL Y TABLAS               */
-/* ================================================= */
-
-/* Contenedores de código generales */
-pre {
-  background-color: #f7f7f7;
-  padding: 15px; 
-  border-radius: 5px;
-  overflow-x: auto;
-  font-size: 0.95em;
-  border-left: 5px solid #2ecc71; /* Destaca el bloque de código */
-}
-
-/* Estilo específico para la simulación de terminal */
-.terminal-command {
-    background-color: #2d313c;
-    color: #4CAF50; 
-    padding: 15px;
-    border-radius: 5px;
-    font-family: 'Consolas', 'Monospace', monospace;
-    white-space: pre-wrap;
-    word-break: break-all;
-    margin: 15px 0;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Estilos para Tablas */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 25px 0;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-  background-color: #ffffff;
-  font-size: 0.9em;
-}
-
-th, td {
-  border: 1px solid #e0e0e0;
-  padding: 12px 15px;
-  text-align: left;
-}
-
-th {
-  background-color: #2c3e50;
-  color: white;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.85em; 
-}
-
-tr:nth-child(even) {
-  background-color: #f7f7f7;
-}
-
-tr:hover {
-  background-color: #eaf2f8; 
-}
-/* ================================================= */
-/* ESTILOS ESPECÍFICOS DEL W3C PROXY                 */
-/* ================================================= */
-
-.w3c-btn {
-  background-color: #3498db;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.w3c-btn:hover {
-  background-color: #2980b9;
-}
-
-.w3c-card {
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 15px;
-}
-
-/* Estilo para éxito */
-.w3c-card.success {
-  background-color: #e6ffe6;
-  border: 1px solid #00c000;
-  color: #004d00;
-}
-
-/* Estilo para error */
-.w3c-card.error {
-  background-color: #ffe6e6;
-  border: 1px solid #c00000;
-  color: #4d0000;
-}
-
-.title-scraped {
-    display: block;
-    font-size: 1.1em;
-    padding: 5px 0;
-    color: #2c3e50;
-}
+  <script src="script.js"></script>
+</body>
+</html>
