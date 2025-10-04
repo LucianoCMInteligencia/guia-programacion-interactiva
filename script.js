@@ -441,7 +441,7 @@ const sections = {
       <p>Hola, soy Luciano Francisco Amaya Gutiérrez. Soy estudiante apasionado por la programación y el desarrollo web. Esta guía interactiva es parte de mi proyecto educativo para compartir lo que he aprendido en detalle sobre DAM, DAW y el ciclo de vida de un proyecto de software.</p>
     </section>
   `
-};
+}; // <--- ¡Esta es la ÚNICA llave de cierre para el objeto sections!
 
 
 // Lógica de Renderizado
