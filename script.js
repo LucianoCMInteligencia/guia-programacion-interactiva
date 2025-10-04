@@ -1,36 +1,45 @@
 // =============================================================
-// ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN SIMULADA DE ÉXITO) - MODIFICADA
-// Ahora simula cargar el contenido extraído sobre códigos ISO y ofrece navegar.
+// ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN REAL CON NETLIFY FUNCTION)
+// Se llama al endpoint del proxy para obtener datos del W3C.
 // =============================================================
 async function fetchW3cStandards() {
     const container = document.getElementById("w3c-standards-container");
-    container.innerHTML = 'Corriendo prueba de conexión...';
+    container.innerHTML = 'Conectando con el Back-End Serverless (Netlify Function)...';
 
-    const targetUrl = 'https://www.w3.org/WAI/standards-guidelines/es';
-    
-    // Simula un pequeño retraso de red
-    await new Promise(resolve => setTimeout(resolve, 1000)); 
+    try {
+        // Llamada real al endpoint de Netlify Function
+        // El navegador pide el dato a tu propio servidor Netlify, evitando CORS.
+        const response = await fetch('/.netlify/functions/w3c-proxy');
+        const data = await response.json();
 
-    const extractedTitle = "Códigos de Idioma ISO (2 vs 3 letras)";
-    
-    let successMessage = `¡Perfecto! La simulación del Back-End funcionó correctamente. La información de **W3C** sobre etiquetas de idioma ya fue cargada en tu guía.`;
+        if (!response.ok) {
+            container.innerHTML = `<div class="w3c-card error"><h3>❌ Error de Back-End</h3><p>Fallo: ${data.error}</p><p>Revisa la consola y el log de tu Netlify Function.</p></div>`;
+            return;
+        }
 
-    container.innerHTML = `
-        <div class="w3c-card success">
-            <h3>✅ Carga Simulada Exitosa (Contenido W3C/ISO)</h3>
-            <p><strong>URL de origen:</strong> <code>${targetUrl}</code></p>
-            <p>${successMessage}</p>
-            <p style="margin-top: 10px;">
-                <a href="#w3c-iso-codes" onclick="renderSection('#w3c-iso-codes');" class="w3c-btn">
-                    Ver Respuesta W3C Completa Aquí ➡️
-                </a>
-            </p>
-        </div>
-    `;
+        // Si es exitoso, actualiza el contenido de la guía con los datos devueltos
+        container.innerHTML = `
+            <div class="w3c-card success">
+                <h3>✅ Carga Exitosa vía Back-End Proxy</h3>
+                <p><strong>URL de origen:</strong> <code>${data.source}</code></p>
+                <p><strong>Título Extraído:</strong> ${data.title}</p>
+                <p>¡La Function ha evitado el CORS y devuelto los datos!</p>
+                <p style="margin-top: 10px;">
+                    <a href="#w3c-iso-codes" onclick="renderSection('#w3c-iso-codes');" class="w3c-btn">
+                        Ver Contenido Completo Extraído ➡️
+                    </a>
+                </p>
+            </div>
+        `;
+
+    } catch (error) {
+        container.innerHTML = `<div class="w3c-card error"><h3>❌ Error de Conexión</h3><p>No se pudo conectar con el endpoint de la función. Asegúrate de que el archivo 'w3c-proxy.js' existe en tu carpeta netlify/functions.</p></div>`;
+    }
 }
 
+
 // =============================================================
-// 🆕 FUNCIÓN ASÍNCRONA: BUSCADOR EXTERNO (PROXY SIMULADO)
+// 🆕 FUNCIÓN ASÍNCRONA: BUSCADOR EXTERNO (PROXY SIMULADO/DEMO)
 // Se invoca para palabras clave W3C, y ahora devuelve un enlace directo a la sección con el contenido que obtuvimos.
 // =============================================================
 async function fetchW3cSearch(query) {
@@ -41,11 +50,11 @@ async function fetchW3cSearch(query) {
             <p>Consultando al servicio de Back-End (Netlify Function) para buscar: <strong>${query}</strong></p>
         </div>
     `;
-    
+
     // Simula el tiempo de red y procesamiento del servidor
     await new Promise(resolve => setTimeout(resolve, 2000)); 
 
-    // SIMULACIÓN DE DEVOLUCIÓN DEL RESULTADO RELEVANTE (El texto de ISO)
+    // SIMULACIÓN DE DEVOLUCIÓN DEL RESULTADO RELEVANTE
     const resultHtml = `
         <h2>🔎 Resultados Externos para "${query}" (W3C)</h2>
         <div class="w3c-card success">
@@ -61,18 +70,18 @@ async function fetchW3cSearch(query) {
              <p>Ver la sección de esta guía que contiene información sobre estándares web y accesibilidad.</p>
         </div>
     `;
-    
+
     contentElement.innerHTML = resultHtml;
 }
 
 
 // =============================================================
-// ✅ FUNCIÓN DE BÚSQUEDA DEDICADA (Instantánea) - MODIFICADA
+// ✅ FUNCIÓN DE BÚSQUEDA DEDICADA (Instantánea)
 // =============================================================
 function searchContent() {
     const query = document.getElementById("searchInput").value.trim().toLowerCase();
     const contentElement = document.getElementById("content");
-    
+
     if (query.length === 0) {
         renderSection(location.hash); 
         return;
@@ -83,14 +92,14 @@ function searchContent() {
     const isW3CQuery = w3cKeywords.some(keyword => query.includes(keyword));
 
     if (isW3CQuery) {
-        // Llamar a la función que usa el servicio Back-End simulado
+        // Llamar a la función que usa el servicio Back-End simulado/demo
         fetchW3cSearch(query); 
         return;
     }
 
 
     // 2. Si no es W3C, realizar la búsqueda interna normal
-    
+
     // HACK para incluir palabras clave de W3C en la búsqueda interna también
     const searchableSections = { ...sections }; 
     searchableSections['estandares-w3c'] = searchableSections['estandares-w3c'].replace(
@@ -101,22 +110,22 @@ function searchContent() {
 
     let resultsHtml = '<h2>🔎 Resultados de la Búsqueda Interna:</h2>';
     let matchFound = false;
-    
+
     for (const key in searchableSections) {
         if (searchableSections.hasOwnProperty(key)) {
             const fullContent = searchableSections[key];
-            
+
             const titleMatch = fullContent.match(/<h2>(.*?)<\/h2>/);
             const title = titleMatch ? titleMatch[1] : key.replace(/-/g, ' ').toUpperCase();
-            
+
             const contentLower = fullContent.toLowerCase();
-            
+
             if (contentLower.includes(query) || title.toLowerCase().includes(query)) {
                 matchFound = true;
-                
+
                 let summary = fullContent.substring(fullContent.indexOf('</h2>') + 5).trim();
                 summary = summary.replace(/<[^>]*>/g, '').substring(0, 150) + '...'; 
-                
+
                 const highlightedSummary = summary.replace(new RegExp(query, 'gi'), (match) => `<span class="highlight">${match}</span>`);
 
                 resultsHtml += `
@@ -174,7 +183,7 @@ function checkLinuxCommand() {
 function checkHttpCode() {
     const input = document.getElementById('httpCodeInput').value.trim();
     const feedback = document.getElementById('httpCodeFeedback');
-    
+
     if (input === '301') {
         feedback.innerHTML = '¡Correcto! El código **301 Moved Permanently** informa al navegador que debe usar la nueva URL para futuras peticiones.';
         feedback.style.color = '#28a745';
@@ -211,7 +220,7 @@ function checkDawQuiz() {
 function checkSqlQuery() {
     const input = document.getElementById("sqlInput").value.trim();
     const feedback = document.getElementById("sqlFeedback");
-    
+
     const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
 
     if (normalizedInput === "select nombre from alumnos") {
@@ -226,7 +235,7 @@ function checkSqlQuery() {
 function checkJoinQuery() {
     const input = document.getElementById("joinInput").value.trim();
     const feedback = document.getElementById("joinFeedback");
-    
+
     const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
 
     if (normalizedInput.includes('inner join') && normalizedInput.includes('alumnos') && normalizedInput.includes('clases') && normalizedInput.includes('id_clase')) {
@@ -241,7 +250,7 @@ function checkJoinQuery() {
 function checkPooQuery() {
     const input = document.getElementById("pooInput").value.trim();
     const feedback = document.getElementById("pooFeedback");
-    
+
     const normalizedInput = input.toLowerCase().replace(/\s+/g, ' ').replace(/;$/, '').trim();
 
     if (normalizedInput.includes('const devmaria') && normalizedInput.includes('new desarrollador') && normalizedInput.includes('maría j.') && normalizedInput.includes('front-end')) {
@@ -267,14 +276,12 @@ const sections = {
         </section>
     `,
 
-    // ... (Otras secciones sin cambios) ...
-
     // DAM vs DAW - Coincide con #que-es-dam-daw
     "que-es-dam-daw": `
         <section id="que-es-dam-daw">
             <h2>🎓 DAM vs DAW: Elige tu camino</h2>
             <p>DAM (Desarrollo de Aplicaciones Multiplataforma) y DAW (Desarrollo de Aplicaciones Web) son especialidades con un enfoque distinto:</p>
-            
+
             <h3>🎯 Enfoque Principal</h3>
             <table>
                 <thead>
@@ -351,13 +358,13 @@ const sections = {
             <p id="damFeedback"></p>
         </section>
     `,
-    
+
     // HERRAMIENTAS DEV - Coincide con #herramientas-dev
     "herramientas-dev": `
         <section id="herramientas-dev">
             <h2>🛠️ Herramientas de Desarrollo (IDEs y VSC)</h2>
             <p>Visual Studio Code (VSC) es el editor más popular. Mediante extensiones, se convierte en un IDE completo para DAW y DAM.</p>
-            
+
             <h3>Extensiones Clave de VSC</h3>
             <table>
                 <thead>
@@ -389,13 +396,13 @@ const sections = {
         <section id="linux-detallado">
             <h2>🐧 Comandos Esenciales de Linux</h2>
             <p>Linux es el sistema operativo estándar para servidores. Aprender comandos es crucial para el despliegue y administración de sistemas.</p>
-            
+
             <h3>Comando Fundamental</h3>
             <div class="terminal-command">
                 sudo apt update && sudo apt upgrade -y
             </div>
             <p>Este comando actualiza la lista de paquetes y luego instala las nuevas versiones de forma automática.</p>
-            
+
             <h3>Ejercicio interactivo</h3>
             <label for="linuxInput">Escribe el comando completo que usarías para instalar el navegador Firefox:</label><br>
             <input type="text" id="linuxInput" placeholder="Ej: sudo apt install [paquete]" />
@@ -445,34 +452,34 @@ const sections = {
                     <p>Analizamos las salidas profesionales, salarios y tecnologías clave para ayudarte a decidir entre el desarrollo web y el desarrollo de aplicaciones nativas.</p>
                     <a href="#que-es-dam-daw" class="read-more-btn">Leer Análisis Completo</a>
                 </article>
-                
+
                 </div>
         </section>
     `,
-    
+
     // ESTÁNDARES W3C - Coincide con #estandares-w3c
     "estandares-w3c": `
         <section id="estandares-w3c">
             <h2>🌐 Accesibilidad y Estándares W3C (WCAG)</h2>
             <p>La accesibilidad web (DAW) y la usabilidad (DAM) son fundamentales. Los estándares **WCAG (Web Content Accessibility Guidelines)** son la referencia mundial.</p>
 
-            <h3>Demostración de Carga de Datos en Vivo</h3>
-            <p>Esta sección demuestra una habilidad Full-Stack (Back-End Serverless) al intentar cargar un dato directamente de una URL de prueba, burlando la política CORS mediante una **solución de proxy estable**.</p>
+            <h3>Demostración de Carga de Datos en Vivo (Solución CORS)</h3>
+            <p>Esta sección demuestra una habilidad Full-Stack al llamar a una **Netlify Function** para obtener datos de una URL externa, burlando la política CORS.</p>
 
             <button onclick="fetchW3cStandards()" class="w3c-btn">Actualizar Estándares Ahora</button>
-            
+
             <div id="w3c-standards-container" style="margin-top: 20px;">
                 <p>Pulsa el botón para cargar la información.</p>
             </div>
         </section>
-    `, 
+    `,
 
-    // 🆕 NUEVA SECCIÓN: Contenido extraído de W3C sobre códigos ISO
+    // 🆕 SECCIÓN: Contenido extraído de W3C sobre códigos ISO (Hardcodeado para la demo)
     "w3c-iso-codes": `
         <section id="w3c-iso-codes">
             <h2>📝 Códigos de Idioma ISO (2 vs 3 letras)</h2>
-            <p>Este contenido fue extraído en tiempo real del sitio **w3.org** a través de la simulación de un Back-End (Netlify Function).</p>
-            
+            <p>Este contenido fue extraído de forma simulada/demostración del sitio **w3.org** a través de la lógica de Back-End.</p>
+
             <h3>Respuesta del W3C (Estándar Actual)</h3>
             <div class="w3c-card info">
                 <p>Tanto en Internet como en la Web se utilizan etiquetas de idioma para indicar el idioma natural del texto en protocolos y formatos, como **HTML, XHTML, XML, HTTP** y otros. En el pasado, los valores de las etiquetas de idioma estaban definidos por la especificación **RFC 3066** Etiquetas para la identificación de idiomas (y la anterior RFC 1766), y comenzaban con un **código de idioma de dos letras ISO 639-1** o un **código de tres letras ISO 639-2**.</p>
@@ -487,11 +494,11 @@ const sections = {
         <section id="sql-basico">
             <h2>🗄️ SQL Básico: La Persistencia de Datos</h2>
             <p>SQL (**Structured Query Language**) es el lenguaje estándar para manejar bases de datos relacionales. Su fortaleza radica en la capacidad de relacionar datos de múltiples tablas.</p>
-            
+
             <h3>Comandos Fundamentales (CRUD y JOIN)</h3>
-            
+
             <p>El comando clave para relacionar tablas es **JOIN**, y el más común es el **INNER JOIN**, que devuelve filas cuando hay coincidencias en ambas tablas.</p>
-            
+
             <table class="sql-table">
                 <thead>
                     <tr>
@@ -517,7 +524,7 @@ const sections = {
 
             <h3>🧪 Ejercicio 1: SELECT</h3>
             <p>Imagina que tienes una tabla de 'alumnos'. Escribe la consulta SQL para obtener **solo la columna 'nombre'** de todos los alumnos:</p>
-            
+
             <div class="code-editor">
                 <textarea id="sqlInput" placeholder="Ej: SELECT * FROM tabla;"></textarea>
                 <button onclick="checkSqlQuery()">Comprobar SELECT</button>
@@ -526,7 +533,7 @@ const sections = {
 
             <h3>🧪 Ejercicio 2: INNER JOIN</h3>
             <p>Tienes dos tablas: **'alumnos'** y **'clases'**. Ambas comparten la columna **'id_clase'**. Escribe el comando SQL completo para unir ambas tablas con un INNER JOIN:</p>
-            
+
             <div class="code-editor">
                 <textarea id="joinInput" placeholder="Ej: SELECT * FROM tabla1 INNER JOIN tabla2 ON tabla1.clave = tabla2.clave;"></textarea>
                 <button onclick="checkJoinQuery()">Comprobar JOIN</button>
@@ -540,7 +547,7 @@ const sections = {
         <section id="poo-js">
             <h2>🧠 POO en JavaScript: Clases y Objetos</h2>
             <p>La **Programación Orientada a Objetos (POO)** organiza el código alrededor de 'objetos' que contienen datos y funciones. En JavaScript, usamos la sintaxis de **clases** para crear planos (blueprints) de estos objetos.</p>
-            
+
             <h3>Conceptos Clave de POO</h3>
             <ul>
                 <li>**Clase:** El plano para crear objetos (Ej: Persona).</li>
@@ -548,37 +555,37 @@ const sections = {
                 <li>**Método:** Una función definida dentro de una clase.</li>
                 <li>**Herencia:** Una clase nueva que toma propiedades y métodos de una clase ya existente.</li>
             </ul>
-            
+
             <h3>Ejemplo de Clase en JS</h3>
             <p>Una clase simple para representar un **Desarrollador**:</p>
-            
+
             <div class="terminal-command">
                 class Desarrollador {
                     constructor(nombre, rol) {
                         this.nombre = nombre;
                         this.rol = rol;
                     }
-                
+
                     presentarse() {
                         return \`Hola, soy \${this.nombre} y mi rol es \${this.rol}.\`;
                     }
                 }
-                
+
                 // Crear una instancia (un objeto)
                 const devLuciano = new Desarrollador('Luciano F.', 'Full-Stack');
             </div>
             <button onclick="copyCode(this)">Copiar Código</button>
-            
+
             <h3>🧪 Ejercicio Interactivo</h3>
             <p>Crea una nueva instancia de la clase **Desarrollador** llamada **devMaria** con el nombre 'María J.' y el rol 'Front-End'.</p>
-            
+
             <div class="code-editor">
                 <textarea id="pooInput" placeholder="Ej: const miObjeto = new Clase(...);"></textarea>
                 <button onclick="checkPooQuery()">Comprobar POO</button>
             </div>
             <p id="pooFeedback"></p>
         </section>
-    `, 
+    `,
 
     // SOBRE MÍ - Coincide con #sobre-mi
     "sobre-mi": `
@@ -594,7 +601,7 @@ const sections = {
         <section id="conceptos-base">
             <h2>📚 Conceptos Base: El Vocabulario del Programador</h2>
             <p>Antes de escribir código, debemos entender el panorama general. Dominar estos términos es el primer paso para interpretar cualquier proyecto.</p>
-            
+
             <h3>Frontend y Backend</h3>
             <table class="concept-table">
                 <thead>
@@ -617,7 +624,7 @@ const sections = {
                     </tr>
                 </tbody>
             </table>
-            
+
             <h3>Términos Clave</h3>
             <ul>
                 <li>**API (Application Programming Interface):** Un puente que permite a dos sistemas (ej. Frontend y Backend) hablar entre sí.</li>
@@ -625,13 +632,13 @@ const sections = {
             </ul>
         </section>
     `,
-    
+
     // FLUJO HTTP - Coincide con #flujo-http
     "flujo-http": `
         <section id="flujo-http">
             <h2>🌐 Flujo de Petición HTTP: Cómo funciona la Web</h2>
             <p>Para entender cualquier desarrollo web, es crucial saber qué ocurre desde que escribes una URL hasta que ves la página. Esto se conoce como el **Ciclo de Petición-Respuesta HTTP**.</p>
-            
+
             <ol>
                 <li>
                     <h3>1. Petición (Request) del Cliente 🧑‍💻</h3>
@@ -666,7 +673,7 @@ const sections = {
         <section id="algoritmos-flujo">
             <h2>🧠 Lógica y Algoritmos (Pensamiento Computacional)</h2>
             <p>Un **algoritmo** es una secuencia de pasos finitos y bien definidos para resolver un problema. Es la habilidad más importante que aprenderás.</p>
-            
+
             <h3>Conceptos de Flujo</h3>
             <ol>
                 <li>**Secuencia:** Las instrucciones se ejecutan una tras otra en orden.</li>
@@ -683,7 +690,7 @@ const sections = {
         <section id="introduccion-html">
             <h2>📝 HTML5: Estructura, Semántica y Accesibilidad</h2>
             <p>HTML no es un lenguaje de programación, sino de **marcado**. Define la estructura y el significado (**semántica**) del contenido web.</p>
-            
+
             <h3>Semántica Importante</h3>
             <p>Usar las etiquetas correctas ayuda a los navegadores y a los lectores de pantalla a entender tu contenido (accesibilidad W3C):</p>
             <table class="html-table">
@@ -700,7 +707,7 @@ const sections = {
         <section id="metodologia-agile">
             <h2>🏃 Metodologías Ágiles (SCRUM y Kanban)</h2>
             <p>En el desarrollo profesional (tanto en DAM como en DAW), se usa la metodología **Ágil** para gestionar proyectos de manera flexible e incremental, a través de ciclos cortos (Sprints).</p>
-            
+
             <h3>SCRUM: El Marco más Usado</h3>
             <ul>
                 <li>**Sprint:** Ciclo de trabajo de 1 a 4 semanas donde se entrega un incremento funcional.</li>
@@ -716,7 +723,7 @@ const sections = {
         <section id="seguridad-basica">
             <h2>🔒 Seguridad Web: Prevención de Ataques Comunes</h2>
             <p>La seguridad es responsabilidad de todo programador (Back-End, Front-End y BBDD). Nunca confíes en la información que proviene del usuario.</p>
-            
+
             <h3>Amenazas Críticas</h3>
             <p>Debes conocer y saber cómo prevenir:</p>
             <ul>
@@ -731,10 +738,10 @@ const sections = {
         <section id="patrones-diseño">
             <h2>📐 Patrones de Diseño (Estructura POO)</h2>
             <p>Los patrones de diseño son soluciones probadas a problemas comunes. Te ayudan a escribir código más modular, reutilizable y fácil de mantener (Principios SOLID).</p>
-            
+
             <h3>Patrón Singleton (Creacional)</h3>
             <p><strong>Propósito:</strong> Garantiza que una clase solo tenga **una instancia** y proporciona un punto de acceso global a ella. Útil para gestionar la conexión a una Base de Datos o la configuración.</p>
-            
+
             <h3>Patrón Factory (Creacional)</h3>
             <p><strong>Propósito:</strong> Proporciona una interfaz para crear objetos en una superclase, pero permite a las subclases alterar el tipo de objetos que se crean. Útil para la creación flexible de objetos (ej. crear diferentes tipos de vehículos).</p>
         </section>
@@ -745,7 +752,7 @@ const sections = {
         <section id="docker-contenedores">
             <h2>🐳 Contenedores: Docker y la Virtualización Ligera</h2>
             <p>Docker es la herramienta estándar para el despliegue avanzado. Resuelve el problema del "¿Funciona en mi máquina, pero no en el servidor?".</p>
-            
+
             <h3>Conceptos Clave</h3>
             <ul>
                 <li>**Contenedor:** Una unidad de software estandarizada que empaqueta código y todas sus dependencias para que la aplicación se ejecute de forma rápida y fiable en cualquier entorno.</li>
@@ -755,13 +762,13 @@ const sections = {
             <p>Usar Docker asegura que tu entorno de desarrollo es idéntico a tu entorno de producción.</p>
         </section>
     `,
-    
+
     // OPTIMIZACIÓN WEB - Coincide con #optimizacion-web
     "optimizacion-web": `
         <section id="optimizacion-web">
             <h2>⚡ Optimización y Rendimiento Web (Core Vitals)</h2>
             <p>La velocidad de carga y la experiencia del usuario (UX) son críticas. Google mide el rendimiento con las **Core Web Vitals**.</p>
-            
+
             <h3>Claves de Optimización</h3>
             <ol>
                 <li>**Compresión:** Usar Gzip o Brotli para reducir el tamaño de los archivos CSS, JS y HTML que se envían al navegador.</li>
@@ -777,7 +784,7 @@ const sections = {
         <section id="typescript-modular">
             <h2>🔷 TypeScript e Ingeniería de Software</h2>
             <p>TypeScript (TS) es un "superset" de JavaScript que añade **tipado estático**. Es decir, puedes definir si una variable es un número, una cadena, etc.</p>
-            
+
             <h3>Ventajas para Proyectos Grandes</h3>
             <ul>
                 <li>**Menos Errores:** Atrapa errores de tipo en tiempo de desarrollo, antes de que lleguen a producción.</li>
@@ -797,7 +804,7 @@ const sections = {
 function renderSection(hash) {
     const key = hash.replace("#", "") || "home"; 
     const contentElement = document.getElementById("content");
-    
+
     const searchInput = document.getElementById("searchInput");
     if (searchInput && searchInput.value.length > 0) {
          searchInput.value = '';
@@ -810,7 +817,7 @@ function renderSection(hash) {
 window.addEventListener("hashchange", () => renderSection(location.hash));
 document.addEventListener("DOMContentLoaded", () => {
     renderSection(location.hash);
-    
+
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('keypress', function (e) {
