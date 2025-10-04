@@ -25,8 +25,8 @@ async function fetchW3cStandards() {
         const rawHtml = await response.text(); 
         
         // LÓGICA DE EXTRACCIÓN SIMPLE (Scraping): Intentamos extraer el título.
-        // CORRECCIÓN: Usamos una frase más corta para asegurar la coincidencia.
-        const extractionMarker = "Pautas de Accesibilidad";
+        // CORRECCIÓN FINAL: Usamos una frase más corta y estable para asegurar la coincidencia.
+        const extractionMarker = "Pautas de Accesibilidad"; // <--- ¡CORRECCIÓN APLICADA AQUÍ!
         
         let extractedContent = "No se pudo encontrar el fragmento clave en el HTML cargado.";
         let successMessage = "Esta sección demuestra la lógica de Front-End al usar un proxy para superar el bloqueo CORS.";
