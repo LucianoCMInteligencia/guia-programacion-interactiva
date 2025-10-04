@@ -1,11 +1,16 @@
 // ✅ Función para copiar código al portapapeles
 function copyCode(button) {
-  // Buscamos el elemento <pre> o .terminal-command anterior
+  // 1. Buscamos el elemento de código que siempre está JUSTO antes del botón.
+  //    Puede ser un <pre> o un <div class="terminal-command">
   const codeContainer = button.previousElementSibling;
+  
+  // 2. Si el contenedor existe, obtenemos su texto y limpiamos espacios.
   const code = codeContainer ? codeContainer.textContent.trim() : '';
 
   if (code) {
+    // 3. Usamos la API del portapapeles.
     navigator.clipboard.writeText(code).then(() => {
+      // 4. Cambiamos el texto del botón por 2 segundos.
       const originalText = button.textContent;
       button.textContent = "¡Copiado! ✅";
       setTimeout(() => button.textContent = originalText, 2000);
@@ -13,12 +18,13 @@ function copyCode(button) {
       console.error('Error al copiar el texto: ', err);
       alert('Error al copiar el texto.');
     });
+  } else {
+    console.error("No se encontró el contenedor de código.");
   }
 }
 
 // ✅ Función para validar comando Linux
 function checkLinuxCommand() {
-  // Añadimos .toLowerCase() para aceptar mayúsculas/minúsculas
   const input = document.getElementById("linuxInput").value.trim().toLowerCase();
   const feedback = document.getElementById("linuxFeedback");
   if (input === "sudo apt install firefox") {
@@ -55,18 +61,22 @@ function checkDawQuiz() {
   }
 }
 
-// ✅ Contenido dinámico por sección (Objeto Consolidado y Correcto)
+// =============================================================
+// ✅ Contenido dinámico por sección (CLAVES SINCRONIZADAS CON EL HTML)
+// =============================================================
 const sections = {
+  // HOME - Coincide con #home
   home: `
     <section id="home">
       <h2>👋 Bienvenido a Mi Guía Interactiva</h2>
-      <p>Esta guía te acompañará paso a paso en tu formación como programador. Navega por el menú superior para explorar los temas clave de los ciclos DAM y DAW, desde los fundamentos hasta el control de versiones y el despliegue profesional.</p>
+      <p>Esta guía te acompañará paso a paso en tu formación como programador, Luciano Francisco Amaya Gutiérrez. Navega por el menú superior para explorar los temas clave de los ciclos DAM y DAW, desde los fundamentos hasta el control de versiones y el despliegue profesional.</p>
       <p>¡Comencemos!</p>
     </section>
   `,
 
-  introduccion: `
-    <section id="introduccion">
+  // DAM vs DAW - Coincide con #que-es-dam-daw
+  "que-es-dam-daw": `
+    <section id="que-es-dam-daw">
       <h2>🎓 DAM vs DAW: Elige tu camino</h2>
       <p>DAM (Desarrollo de Aplicaciones Multiplataforma) y DAW (Desarrollo de Aplicaciones Web) son especialidades con un enfoque distinto:</p>
       
@@ -83,7 +93,7 @@ const sections = {
           <tr>
             <td>**DAM**</td>
             <td>Multiplataforma (Escritorio/Móvil)</td>
-            <td>Se instala y ejecuta directamente en el sistema operativo del dispositivo.</td>
+            <td>Se instala y ejecuta directamente en el sistema operativo del dispositivo (móvil o escritorio).</td>
           </tr>
           <tr>
             <td>**DAW**</td>
@@ -92,24 +102,20 @@ const sections = {
           </tr>
         </tbody>
       </table>
-      
-      <h3>📚 Lenguajes Clave</h3>
-      <p>DAM se enfoca en lenguajes como **Java/Kotlin** (Android) y **C#** (.NET), mientras que DAW se centra en **HTML**, **CSS**, **JavaScript** y lenguajes de servidor como **PHP** o **Python**.</p>
     </section>
   `,
 
+  // DAW - Coincide con #daw
   daw: `
     <section id="daw">
       <h2>🌐 Desarrollo de Aplicaciones Web (DAW)</h2>
-      <p>Especialidad centrada en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones que se ejecutan en navegadores (Front-End) y servidores (Back-End).</p>
+      <p>Especialidad centrada en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones que se ejecutan en navegadores y servidores.</p>
 
       <h3>📚 Tecnologías Esenciales</h3>
       <ul>
         <li>**HTML5:** Estructura de la web.</li>
         <li>**CSS3:** Diseño, estilo y apariencia visual.</li>
-        <li>**JavaScript:** Interactividad, funcionalidad y lógica del lado del cliente.</li>
-        <li>**PHP/Python/Node.js:** Lógica del lado del servidor (Back-End).</li>
-        <li>**SQL:** Gestión de bases de datos.</li>
+        <li>**JavaScript:** Interactividad y lógica del lado del cliente.</li>
       </ul>
 
       <h3>🧪 Ejercicio Interactivo</h3>
@@ -125,18 +131,17 @@ const sections = {
     </section>
   `,
 
+  // DAM - Coincide con #dam
   dam: `
     <section id="dam">
       <h2>💻 Desarrollo de Aplicaciones Multiplataforma (DAM)</h2>
-      <p>Especialidad centrada en la creación de aplicaciones informáticas que funcionan en múltiples sistemas operativos (Windows, Linux, macOS) y dispositivos móviles (Android, iOS).</p>
+      <p>Especialidad centrada en la creación de aplicaciones informáticas que funcionan en múltiples sistemas operativos y dispositivos móviles.</p>
 
       <h3>📚 Tecnologías Esenciales</h3>
       <ul>
         <li>**Java/Kotlin:** Lógica principal, especialmente en desarrollo Android.</li>
-        <li>**C# (.NET):** Aplicaciones de escritorio para Windows y entornos empresariales.</li>
-        <li>**XML / XAML:** Diseño de la Interfaz de Usuario (UI) en Android y C#.</li>
-        <li>**SQL (SQLite):** Persistencia de datos local en las aplicaciones.</li>
-        <li>**JSON:** Intercambio de datos con servicios web externos (APIs).</li>
+        <li>**C# (.NET):** Aplicaciones de escritorio para Windows.</li>
+        <li>**XML / XAML:** Diseño de la Interfaz de Usuario (UI).</li>
       </ul>
 
       <h3>🧪 Ejercicio Interactivo</h3>
@@ -152,13 +157,13 @@ const sections = {
     </section>
   `,
   
+  // HERRAMIENTAS DEV - Coincide con #herramientas-dev
   "herramientas-dev": `
     <section id="herramientas-dev">
       <h2>🛠️ Herramientas de Desarrollo (IDEs y VSC)</h2>
-      <p>Tu entorno de desarrollo integrado (IDE) es tu estación de trabajo. La herramienta más popular y flexible es **Visual Studio Code (VSC)**.</p>
+      <p>Visual Studio Code (VSC) es el editor más popular. Mediante extensiones, se convierte en un IDE completo para DAW y DAM.</p>
       
-      <h3>VS Code: El Editor que se Convierte en IDE</h3>
-      <p>VSC es ligero y, mediante extensiones, se adapta a cualquier lenguaje (DAW o DAM).</p>
+      <h3>Extensiones Clave de VSC</h3>
       <table>
         <thead>
           <tr>
@@ -169,11 +174,11 @@ const sections = {
         <tbody>
           <tr>
             <td>**Live Server**</td>
-            <td>Previsualización instantánea de HTML/CSS/JS (DAW).</td>
+            <td>Previsualización instantánea de proyectos web (DAW).</td>
           </tr>
           <tr>
-            <td>**Language Packs** (Java, C#)</td>
-            <td>Soporte para compilación, autocompletado y depuración (DAM).</td>
+            <td>**Language Packs**</td>
+            <td>Soporte para lenguajes como Java o C# (DAM).</td>
           </tr>
           <tr>
             <td>**GitLens**</td>
@@ -184,16 +189,17 @@ const sections = {
     </section>
   `,
 
-  linux: `
-    <section id="linux">
+  // COMANDOS LINUX - Coincide con #linux-detallado
+  "linux-detallado": `
+    <section id="linux-detallado">
       <h2>🐧 Comandos Esenciales de Linux</h2>
-      <p>Linux es el sistema operativo estándar para servidores y desarrollo. Entender sus comandos es crucial para la administración de sistemas y el despliegue.</p>
+      <p>Linux es el sistema operativo estándar para servidores. Aprender comandos es crucial para el despliegue y administración de sistemas.</p>
       
-      <h3>Comandos Básicos</h3>
+      <h3>Comando Fundamental</h3>
       <div class="terminal-command">
         sudo apt update && sudo apt upgrade -y
       </div>
-      <p>Este comando actualiza la lista de paquetes (`update`) y luego instala las nuevas versiones (`upgrade`) de forma automática y con permisos de administrador (`sudo`).</p>
+      <p>Este comando actualiza la lista de paquetes y luego instala las nuevas versiones de forma automática.</p>
       
       <h3>Ejercicio interactivo</h3>
       <label for="linuxInput">Escribe el comando completo que usarías para instalar el navegador Firefox:</label><br>
@@ -203,13 +209,14 @@ const sections = {
     </section>
   `,
 
+  // FLUJO GIT - Coincide con #flujo-git
   "flujo-git": `
     <section id="flujo-git">
       <h2>🚀 Flujo de Despliegue y Control de Versiones</h2>
-      <p>El control de versiones con **Git** y el despliegue son las fases finales de cualquier proyecto profesional.</p>
+      <p>**Git** es esencial para el control de versiones y **Vercel/Netlify** para desplegar proyectos web.</p>
 
       <h3>Flujo Git Básico</h3>
-      <p>Para subir tu código a un repositorio como GitHub o GitLab:</p>
+      <p>Para guardar y subir tu código a un repositorio:</p>
       <div class="terminal-command">
         git init<br>
         git add .<br>
@@ -218,16 +225,17 @@ const sections = {
       </div>
       <button onclick="copyCode(this)">Copiar comandos</button>
 
-      <h3>Despliegue (Hosting)</h3>
-      <p>Plataformas como **Vercel** o **Netlify** permiten desplegar tu aplicación web (DAW) automáticamente, conectándose a tu repositorio de Git y publicando los cambios en segundos.</p>
+      <h3>Despliegue Web (DAW)</h3>
+      <p>Plataformas como Vercel o Netlify permiten desplegar tu aplicación web (DAW) automáticamente desde tu repositorio de Git.</p>
     </section>
   `,
 
+  // SOBRE MÍ - Coincide con #sobre-mi
   "sobre-mi": `
     <section id="sobre-mi">
       <h2>👤 Sobre Mí</h2>
-      <p>Hola, soy **Luciano Francisco Amaya Gutiérrez**. Soy un estudiante apasionado por la programación y el desarrollo de software.</p>
-      <p>Esta guía interactiva es parte de mi proyecto educativo para consolidar conocimientos clave de los ciclos DAM y DAW. Si tienes alguna sugerencia o encuentras algún error, ¡no dudes en notificarlo!</p>
+      <p>Hola, soy **Luciano Francisco Amaya Gutiérrez**. Soy un estudiante apasionado por la programación.</p>
+      <p>Esta guía interactiva es parte de mi proyecto educativo para consolidar conocimientos clave de los ciclos DAM y DAW.</p>
     </section>
   `
 };
@@ -243,7 +251,7 @@ function renderSection(hash) {
 }
 
 // ✅ Eventos para cargar contenido dinámico
-// 1. Cuando la URL cambia (clic en un enlace del menú)
+// 1. Cuando la URL cambia (al hacer clic en los enlaces del menú)
 window.addEventListener("hashchange", () => renderSection(location.hash));
 
 // 2. Cuando la página carga por primera vez (para mostrar el home al inicio)
