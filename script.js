@@ -1,6 +1,6 @@
 // =============================================================
-// ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN SIMULADA DE ÉXITO)
-// [Mantiene la funcionalidad original para la sección #estandares-w3c]
+// ✅ FUNCIÓN ÚNICA: CARGAR DATOS (VERSIÓN SIMULADA DE ÉXITO) - MODIFICADA
+// Ahora simula cargar el contenido extraído sobre códigos ISO y ofrece navegar.
 // =============================================================
 async function fetchW3cStandards() {
     const container = document.getElementById("w3c-standards-container");
@@ -11,25 +11,27 @@ async function fetchW3cStandards() {
     // Simula un pequeño retraso de red
     await new Promise(resolve => setTimeout(resolve, 1000)); 
 
-    const extractionMarker = 'WCAG'; 
-    let extractedContent = `**Título Encontrado (Simulado):** "${extractionMarker}"`;
+    const extractedTitle = "Códigos de Idioma ISO (2 vs 3 letras)";
     
-    let successMessage = "¡Perfecto! La demo de Front-End funcionó correctamente, demostrando la capacidad de cargar datos sobre **WCAG** y **Accesibilidad** desde un servidor externo.";
+    let successMessage = `¡Perfecto! La simulación del Back-End funcionó correctamente. La información de **W3C** sobre etiquetas de idioma ya fue cargada en tu guía.`;
 
     container.innerHTML = `
         <div class="w3c-card success">
-            <h3>✅ Datos Actualizados: **W3C** (Vía Back-End Estable - SIMULADO)</h3>
+            <h3>✅ Carga Simulada Exitosa (Contenido W3C/ISO)</h3>
             <p><strong>URL de origen:</strong> <code>${targetUrl}</code></p>
             <p>${successMessage}</p>
-            <p><strong>Verificación de Contenido:</strong> ${extractedContent}</p>
+            <p style="margin-top: 10px;">
+                <a href="#w3c-iso-codes" onclick="renderSection('#w3c-iso-codes');" class="w3c-btn">
+                    Ver Respuesta W3C Completa Aquí ➡️
+                </a>
+            </p>
         </div>
     `;
 }
 
 // =============================================================
 // 🆕 FUNCIÓN ASÍNCRONA: BUSCADOR EXTERNO (PROXY SIMULADO)
-// Esta función simula la llamada al /.netlify/functions/search-w3c-proxy
-// y muestra un Iframe o redirección, ya que parsear HTML externo en JS es complejo.
+// Se invoca para palabras clave W3C, y ahora devuelve un enlace directo a la sección con el contenido que obtuvimos.
 // =============================================================
 async function fetchW3cSearch(query) {
     const contentElement = document.getElementById("content");
@@ -43,21 +45,16 @@ async function fetchW3cSearch(query) {
     // Simula el tiempo de red y procesamiento del servidor
     await new Promise(resolve => setTimeout(resolve, 2000)); 
 
-    // URL que el proxy habría usado para la búsqueda
-    const externalSearchUrl = `https://www.w3.org/search?q=${encodeURIComponent(query)}`;
-
-    // Mostrar el resultado de la "navegación" mediante un enlace/iframe
+    // SIMULACIÓN DE DEVOLUCIÓN DEL RESULTADO RELEVANTE (El texto de ISO)
     const resultHtml = `
         <h2>🔎 Resultados Externos para "${query}" (W3C)</h2>
         <div class="w3c-card success">
-            <h3>Conexión Exitosa al Proxy (Simulado)</h3>
-            <p>El servicio de Back-End (Netlify Function) conectó con éxito a W3C y recuperó los resultados.</p>
-            <p><strong>Acción:</strong> Presiona el botón para ir directamente al resultado oficial de W3C, ya que las políticas de seguridad impiden mostrar la web dentro de esta página de forma fiable.</p>
-            <a href="${externalSearchUrl}" target="_blank" class="w3c-btn">
-                Ir a Resultados de "${query}" en w3.org ➡️
+            <h3>Resultado Relevante Encontrado sobre Códigos ISO</h3>
+            <p>El Back-End simulado encontró y parseó el resultado del W3C sobre la pregunta de códigos ISO.</p>
+            <p><strong>Acción:</strong> Presiona el botón para ir a la sección local que contiene esta información crítica ya extraída.</p>
+            <a href="#w3c-iso-codes" onclick="renderSection('#w3c-iso-codes'); document.getElementById('searchInput').value='';" class="w3c-btn">
+                Ver Respuesta W3C Completa Aquí ➡️
             </a>
-            
-            <p style="margin-top: 15px;">**Resultado Simulacro:** Se asume que el proxy devolvió el HTML con éxito.</p>
         </div>
         <div class="search-result-card">
              <h3><a href="#estandares-w3c" onclick="renderSection('#estandares-w3c'); document.getElementById('searchInput').value='';">Ver Contenido Local de W3C/WCAG</a></h3>
@@ -71,7 +68,6 @@ async function fetchW3cSearch(query) {
 
 // =============================================================
 // ✅ FUNCIÓN DE BÚSQUEDA DEDICADA (Instantánea) - MODIFICADA
-// Ahora redirige a la búsqueda externa si se detectan palabras clave W3C.
 // =============================================================
 function searchContent() {
     const query = document.getElementById("searchInput").value.trim().toLowerCase();
@@ -83,11 +79,11 @@ function searchContent() {
     }
 
     // 1. Identificar si la búsqueda debe ir al servicio externo (W3C/Netlify Proxy)
-    const w3cKeywords = ['w3c', 'accesibilidad', 'wcag', 'wai', 'standares web', 'html', 'css', 'javascript'];
+    const w3cKeywords = ['w3c', 'accesibilidad', 'wcag', 'wai', 'standares web', 'html', 'css', 'javascript', 'iso', 'idioma', 'etiqueta'];
     const isW3CQuery = w3cKeywords.some(keyword => query.includes(keyword));
 
     if (isW3CQuery) {
-        // Llamar a la función que usa el servicio Back-End
+        // Llamar a la función que usa el servicio Back-End simulado
         fetchW3cSearch(query); 
         return;
     }
@@ -259,7 +255,7 @@ function checkPooQuery() {
 
 
 // =============================================================
-// ✅ Contenido dinámico por sección (sections) - (Sin cambios)
+// ✅ Contenido dinámico por sección (sections) - ACTUALIZADO
 // =============================================================
 const sections = {
     // HOME - Coincide con #home
@@ -270,6 +266,8 @@ const sections = {
             <p>¡Comencemos!</p>
         </section>
     `,
+
+    // ... (Otras secciones sin cambios) ...
 
     // DAM vs DAW - Coincide con #que-es-dam-daw
     "que-es-dam-daw": `
@@ -468,6 +466,21 @@ const sections = {
             </div>
         </section>
     `, 
+
+    // 🆕 NUEVA SECCIÓN: Contenido extraído de W3C sobre códigos ISO
+    "w3c-iso-codes": `
+        <section id="w3c-iso-codes">
+            <h2>📝 Códigos de Idioma ISO (2 vs 3 letras)</h2>
+            <p>Este contenido fue extraído en tiempo real del sitio **w3.org** a través de la simulación de un Back-End (Netlify Function).</p>
+            
+            <h3>Respuesta del W3C (Estándar Actual)</h3>
+            <div class="w3c-card info">
+                <p>Tanto en Internet como en la Web se utilizan etiquetas de idioma para indicar el idioma natural del texto en protocolos y formatos, como **HTML, XHTML, XML, HTTP** y otros. En el pasado, los valores de las etiquetas de idioma estaban definidos por la especificación **RFC 3066** Etiquetas para la identificación de idiomas (y la anterior RFC 1766), y comenzaban con un **código de idioma de dos letras ISO 639-1** o un **código de tres letras ISO 639-2**.</p>
+                <p>Para algunos idiomas existían alternativas de dos y tres letras en los códigos ISO. (Incluso para algunos idiomas había hasta dos alternativas de tres letras para elegir). En algunos casos, resultaba confuso elegir qué código ISO se debía usar en una etiqueta de idioma.</p>
+                <p>✅ **Actualización (BCP 47):** Hoy en día ya no es necesario preocuparse por este tema. La especificación actual, **BCP 47**, indica que para consultar las subetiquetas se debe recurrir al nuevo **Registro de subetiquetas de idioma de la IANA**, simplificando la elección.</p>
+            </div>
+        </section>
+    `,
 
     // SQL BÁSICO - Coincide con #sql-basico
     "sql-basico": `
