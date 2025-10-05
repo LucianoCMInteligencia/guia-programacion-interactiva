@@ -61,8 +61,8 @@
 </nav>
     
     <div id="search-bar">
-        <input type="text" id="searchInput" onkeyup="searchContent()" placeholder="🔍 Busca un concepto (ej: 'POO', 'JOIN', 'Linux')" aria-label="Buscador de conceptos de programación">
-        </div>
+        <input type="text" id="searchInput" placeholder="Buscar en la guía o en W3C..." onkeyup="if(event.key === 'Enter') searchContent()"> 
+<button onclick="searchContent()">Buscar</button>
 </header>
   </header>
 
