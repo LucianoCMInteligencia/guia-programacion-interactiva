@@ -720,3 +720,20 @@ window.addEventListener('hashchange', () => {
 window.addEventListener('load', () => {
     renderSection(location.hash);
 });
+// =============================================================
+// ✅ LÓGICA DE NAVEGACIÓN (Necesaria para que las funciones anteriores funcionen)
+// =============================================================
+// Función para renderizar el contenido de una sección
+function renderSection(hash) {
+    // ... (El cuerpo de la función) ...
+}
+
+// Escuchar los cambios en la URL
+window.addEventListener('hashchange', () => {
+    renderSection(location.hash);
+});
+
+// Cargar la sección inicial al cargar la página
+window.addEventListener('load', () => {
+    renderSection(location.hash);
+});
