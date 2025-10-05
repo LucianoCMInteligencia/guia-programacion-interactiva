@@ -1,70 +1,48 @@
-// Usamos el módulo nativo HTTPS de Node.js, ¡sin librerías externas!
-const https = require('https'); 
+// La corrección es añadir .default para manejar problemas de Webpack/Bundler de Netlify
+const fetch = require('node-fetch').default; 
 
-// La URL específica del W3C que queremos consultar
-const W3C_TARGET_URL = 'https://www.w3.org/International/questions/qa-lang-2or3.es.html';
+exports.handler = async (event, context) => {
+    // Solo permitimos peticiones POST (si es necesario)
+    if (event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
 
-// El módulo URL es nativo de Node y nos ayuda a parsear la URL
-const { URL } = require('url'); 
+    try {
+        const { url } = JSON.parse(event.body);
 
-exports.handler = async (event) => {
-    return new Promise((resolve, reject) => {
-        
-        const parsedUrl = new URL(W3C_TARGET_URL);
-        
-        const options = {
-            hostname: parsedUrl.hostname,
-            path: parsedUrl.pathname,
-            method: 'GET',
+        if (!url) {
+            return { statusCode: 400, body: 'Missing URL in request body.' };
+        }
+
+        // Realizamos la petición GET a la URL de prueba del W3C
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        return {
+            statusCode: 200,
             headers: {
-                // Simular un navegador para evitar bloqueos
-                'User-Agent': 'Netlify-Function-Proxy',
-                'Accept': 'text/html,application/xhtml+xml,application/xml'
-            }
+                // Habilitamos CORS para que el Front-End pueda leer la respuesta
+                'Access-Control-Allow-Origin': '*', 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                status: "✅ Carga Exitosa vía Back-End Proxy",
+                data: data 
+            })
         };
-
-        const req = https.request(options, (res) => {
-            let data = '';
-
-            // 1. Acumular los datos a medida que llegan
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            // 2. Cuando la respuesta termina
-            res.on('end', () => {
-                // Extraer el título para una confirmación limpia
-                const titleMatch = data.match(/<h1>(.*?)<\/h1>/i);
-                const extractedTitle = titleMatch ? titleMatch[1] : "Contenido W3C sobre etiquetas de idioma";
-                
-                // 3. Devolver la respuesta exitosa al Front-End
-                resolve({
-                    statusCode: 200,
-                    headers: {
-                        'Access-Control-Allow-Origin': '*', 
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        source: W3C_TARGET_URL,
-                        title: extractedTitle,
-                        message: "¡Conexión W3C exitosa usando solo módulos nativos de Node!",
-                    }),
-                });
-            });
-        });
-
-        // Manejo de errores de conexión
-        req.on('error', (error) => {
-            console.error('HTTPS Proxy Error:', error.message);
-            resolve({
-                statusCode: 500,
-                body: JSON.stringify({ 
-                    status: "❌ Fallo del Servidor Proxy", 
-                    message: `Error de red al conectar: ${error.message}` 
-                }),
-            });
-        });
-
-        req.end();
-    });
+    } catch (error) {
+        console.error('Proxy Error:', error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ 
+                status: "❌ Fallo del Servidor Proxy", 
+                message: error.message 
+            })
+        };
+    }
 };
